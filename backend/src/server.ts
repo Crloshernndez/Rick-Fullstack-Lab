@@ -1,32 +1,18 @@
-import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
+import { setupApp } from "./app";
 
-const typeDefs = `#graphql
-  type Query {
-    hello: String
-    ping: String
+const PORT = process.env.API_PORT || 4000;
+
+async function bootstrap() {
+  try {
+    const app = await setupApp();
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("Error starting server:", error);
+    process.exit(1);
   }
-`;
-
-const resolvers = {
-  Query: {
-    hello: () => "Hola desde el Backend!",
-    ping: () => "pong",
-  },
-};
-
-async function startServer() {
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-  });
-
-  // Iniciamos el servidor en el puerto 4000
-  const { url } = await startStandaloneServer(server, {
-    listen: { port: 4000 },
-  });
-
-  console.log(`🚀 Servidor listo en: ${url}`);
 }
 
-startServer();
+bootstrap();
