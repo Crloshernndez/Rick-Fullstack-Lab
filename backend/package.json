@@ -19,7 +19,9 @@
     "typescript": "^6.0.2"
   },
   "dependencies": {
-    "@apollo/server": "^5.5.0",
+    "@apollo/server": "^4.10.0",
+    "@graphql-tools/schema": "^10.0.32",
+    "@types/graphql": "^14.2.3",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "graphql": "^16.13.2"
