@@ -1,9 +1,12 @@
 import { setupApp } from "./app";
+import { connectDB } from "./core/database";
 
 const PORT = process.env.API_PORT || 4000;
 
 async function bootstrap() {
   try {
+    await connectDB();
+
     const app = await setupApp();
 
     app.listen(PORT, () => {
