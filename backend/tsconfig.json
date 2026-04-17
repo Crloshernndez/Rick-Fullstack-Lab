@@ -9,9 +9,13 @@
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "esnext",
-    "types": [],
+    "types": ["node"],
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
+
+    // Decorators (required for sequelize-typescript)
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
