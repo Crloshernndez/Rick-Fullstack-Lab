@@ -103,13 +103,62 @@ docker-shell-redis: ## Abre una shell en el contenedor de Redis
 	$(DOCKER_COMPOSE) exec redis redis-cli
 
 # =============================================================================
+# DATABASE (Local)
+# =============================================================================
+migration-create: ## Crea una nueva migración (local) - Uso: make migration-create name=create-users
+	@if [ -z "$(name)" ]; then \
+		echo "Error: Debes especificar un nombre. Uso: make migration-create name=create-users"; \
+		exit 1; \
+	fi
+	cd $(BACKEND_DIR) && npx sequelize-cli migration:generate --name $(name)
+
+migration-run: ## Ejecuta las migraciones pendientes (local)
+	cd $(BACKEND_DIR) && npx sequelize-cli db:migrate
+
+migration-undo: ## Revierte la última migración (local)
+	cd $(BACKEND_DIR) && npx sequelize-cli db:migrate:undo
+
+migration-status: ## Muestra el estado de las migraciones (local)
+	cd $(BACKEND_DIR) && npx sequelize-cli db:migrate:status
+
+seed-create: ## Crea un nuevo seeder (local) - Uso: make seed-create name=demo-users
+	@if [ -z "$(name)" ]; then \
+		echo "Error: Debes especificar un nombre. Uso: make seed-create name=demo-users"; \
+		exit 1; \
+	fi
+	cd $(BACKEND_DIR) && npx sequelize-cli seed:generate --name $(name)
+
+seed-run: ## Ejecuta los seeders (local)
+	cd $(BACKEND_DIR) && npx sequelize-cli db:seed:all
+
+seed-undo: ## Revierte los seeders (local)
+	cd $(BACKEND_DIR) && npx sequelize-cli db:seed:undo:all
+
+# =============================================================================
 # DATABASE (Docker)
 # =============================================================================
+docker-migration-create: ## Crea una nueva migración (Docker) - Uso: make docker-migration-create name=create-users
+	@if [ -z "$(name)" ]; then \
+		echo "Error: Debes especificar un nombre. Uso: make docker-migration-create name=create-users"; \
+		exit 1; \
+	fi
+	$(DOCKER_COMPOSE) exec backend npx sequelize-cli migration:generate --name $(name)
+
 docker-migrate: ## Ejecuta las migraciones de Sequelize (Docker)
 	$(DOCKER_COMPOSE) exec backend npx sequelize-cli db:migrate
 
 docker-migrate-undo: ## Revierte la última migración (Docker)
 	$(DOCKER_COMPOSE) exec backend npx sequelize-cli db:migrate:undo
+
+docker-migrate-status: ## Muestra el estado de las migraciones (Docker)
+	$(DOCKER_COMPOSE) exec backend npx sequelize-cli db:migrate:status
+
+docker-seed-create: ## Crea un nuevo seeder (Docker) - Uso: make docker-seed-create name=demo-users
+	@if [ -z "$(name)" ]; then \
+		echo "Error: Debes especificar un nombre. Uso: make docker-seed-create name=demo-users"; \
+		exit 1; \
+	fi
+	$(DOCKER_COMPOSE) exec backend npx sequelize-cli seed:generate --name $(name)
 
 docker-seed: ## Ejecuta los seeders (Docker)
 	$(DOCKER_COMPOSE) exec backend npx sequelize-cli db:seed:all
