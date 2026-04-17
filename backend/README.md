@@ -11,30 +11,43 @@ src/
 ├── app.ts                  # Application factory (Express setup)
 ├── server.ts               # Entry point (Listen port)
 ├── core/                   # Infraestructura central
-│   ├── database.ts         # Sequelize instance & sync
+│   ├── database/           # Database configuration
+│   │   └── migrations/     # Database migrations
+│   ├── cache/              # Cache layer (Redis, in-memory, etc.)
 │   └── middlewares/        # Express Middlewares
 ├── modules/                # Business modules
-│   └── character-catalog/
-│       ├── domain/         # Domain Layer
-│       │   ├── entities/   # Business entities
-│       │   ├── ports/      # Repository interfaces
-│       │   └── services/   # Domain services
-│       ├── application/    # Application Layer
-│       │   ├── use-cases/  # Use cases (business logic)
-│       │   └── dtos/       # Input/Output DTOs
-│       └── infrastructure/ # Infrastructure Layer
-│           ├── repositories/ # Sequelize repository implementations
-│           ├── models/       # Sequelize models
-│           └── entrypoints/
-│               └── graphql/  # GraphQL API
-│                   ├── types/       # GraphQL type definitions
-│                   ├── resolvers/   # GraphQL resolvers
-│                   ├── controllers/ # Adaptation layer
-│                   ├── dto/         # GraphQL DTOs
-│                   └── index.ts     # Apollo Server config
-├── shared/                 # Shared code
-│   └── domain/             # BaseEntity, ValueObject
-└── migrations/             # Database migrations
+│   ├── character-catalog/
+│   │   ├── domain/         # Domain Layer
+│   │   │   ├── entities/   # Business entities
+│   │   │   ├── ports/      # Repository interfaces
+│   │   │   └── services/   # Domain services
+│   │   ├── application/    # Application Layer
+│   │   │   ├── use-cases/  # Use cases (business logic)
+│   │   │   └── dtos/       # Input/Output DTOs
+│   │   └── infrastructure/ # Infrastructure Layer
+│   │       ├── persistence/
+│   │       │   └── sequelize/
+│   │       │       ├── repositories/ # Sequelize repository implementations
+│   │       │       └── models/       # Sequelize models
+│   │       └── entrypoints/
+│   │           └── graphql/  # GraphQL API
+│   │               ├── types/       # GraphQL type definitions
+│   │               ├── resolvers/   # GraphQL resolvers
+│   │               ├── controllers/ # Adaptation layer
+│   │               ├── dto/         # GraphQL DTOs
+│   │               └── index.ts     # Apollo Server config
+│   └── data-sync/          # Data synchronization module
+│       ├── domain/
+│       ├── application/
+│       │   └── use-cases/
+│       └── infrastructure/
+│           └── persistence/
+│               └── sequelize/
+│                   └── models/
+└── shared/                 # Shared code
+    ├── domain/             # BaseEntity, ValueObject
+    ├── exceptions/         # Custom exceptions system
+    └── models/             # Shared Sequelize models
 ```
 
 ### Capas
@@ -95,11 +108,66 @@ npm run migrate      # Ejecutar migraciones
 npm test             # Ejecutar tests
 ```
 
+## Sistema de Excepciones
+
+El proyecto implementa un sistema de excepciones personalizado basado en el **Principio de Sustitución de Liskov (LSP)**, permitiendo que todas las excepciones derivadas de `BaseApplicationError` puedan ser tratadas de manera polimórfica.
+
+### Arquitectura de Excepciones
+
+```typescript
+BaseApplicationError (abstract)
+├── DomainException           // 400 - Violaciones de reglas de negocio
+├── ValidationException       // 422 - Errores de validación de datos
+├── NotFoundException         // 404 - Recursos no encontrados
+├── InfrastructureException   // 503 - Errores de servicios externos
+└── RepositoryException       // 500 - Errores de base de datos
+```
+
+### Características
+
+- **Códigos de error consistentes**: Generación automática de códigos desde el nombre de la clase
+- **HTTP status codes**: Cada excepción mapea a un código HTTP apropiado
+- **Metadata flexible**: Campo `details` para información adicional contextual
+- **Stack traces**: Captura automática para debugging
+- **Integración GraphQL**: Formato de error estandarizado en respuestas GraphQL
+
+### Ejemplo de Uso
+
+```typescript
+// En casos de uso o servicios
+if (!character) {
+  throw new NotFoundException('Character', characterId);
+}
+
+if (!isValidEmail(email)) {
+  throw new ValidationException('Invalid email format', {
+    field: 'email',
+    value: email
+  });
+}
+```
+
+### Formato de Respuesta GraphQL
+
+```json
+{
+  "errors": [{
+    "message": "Character with id '999' not found",
+    "extensions": {
+      "code": "NOT_FOUND",
+      "status": 404,
+      "details": {}
+    }
+  }]
+}
+```
+
 ## Principios de Diseño
 
 - **Dependency Inversion**: El dominio no depende de infraestructura
 - **Single Responsibility**: Cada capa tiene una responsabilidad clara
 - **Open/Closed**: Extensible sin modificar código existente
+- **Liskov Substitution**: Sistema de excepciones polimórfico y extensible
 - **Interface Segregation**: Interfaces específicas por caso de uso
 - **Testability**: Fácil testing mediante inyección de dependencias
 
