@@ -11,8 +11,6 @@ src/
 ├── app.ts                  # Application factory (Express setup)
 ├── server.ts               # Entry point (Listen port)
 ├── core/                   # Infraestructura central
-│   ├── config.ts           # dotenv + Zod validation
-│   ├── security.ts         # JWT / Bcrypt
 │   ├── database.ts         # Sequelize instance & sync
 │   └── middlewares/        # Express Middlewares
 ├── modules/                # Business modules

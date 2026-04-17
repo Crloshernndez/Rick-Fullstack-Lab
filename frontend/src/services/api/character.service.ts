@@ -11,7 +11,7 @@ export const characterService = {
       const { data } = await apolloClient.query<SearchCharactersResponse>({
         query: SEARCH_CHARACTERS,
       });
-      return data.searchCharacters;
+      return data?.searchCharacters || [];
     } catch (error) {
       console.error("Error fetching characters:", error);
       throw error;

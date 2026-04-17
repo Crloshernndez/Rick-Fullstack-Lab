@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 interface DatabaseConfig {
   username: string;
   password: string;
