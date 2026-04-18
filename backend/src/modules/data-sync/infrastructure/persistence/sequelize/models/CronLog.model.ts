@@ -13,6 +13,12 @@ export enum CronLogStatus {
   FAILED = "failed",
 }
 
+export enum SyncType {
+  INITIAL = "initial",
+  SCHEDULED = "scheduled",
+  MANUAL = "manual",
+}
+
 @Table({
   tableName: "cron_logs",
   timestamps: false,
@@ -29,6 +35,13 @@ export class CronLog extends Model {
     field: "execution_date",
   })
   declare executionDate: Date;
+
+  @Column({
+    type: DataType.ENUM(...Object.values(SyncType)),
+    allowNull: false,
+    field: "sync_type",
+  })
+  declare syncType: SyncType;
 
   @Default(0)
   @Column({
