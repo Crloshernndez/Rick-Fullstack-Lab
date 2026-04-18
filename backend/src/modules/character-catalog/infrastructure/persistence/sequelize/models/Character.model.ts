@@ -78,7 +78,7 @@ export class Character extends Model {
   })
   declare origin?: {
     name: string;
-    url: string;
+    id: number;
   };
 
   @Column({
@@ -87,7 +87,7 @@ export class Character extends Model {
   })
   declare location?: {
     name: string;
-    url: string;
+    id: number;
   };
 
   @Index

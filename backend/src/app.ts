@@ -5,15 +5,24 @@ import { GraphQLFormattedError } from "graphql";
 import { characterCatalogSchema } from "./modules/character-catalog/infrastructure/entrypoints/graphql";
 import { setupMiddlewares } from "./core/middlewares";
 import { BaseApplicationError } from "./shared/exceptions/base-application-error";
+import { Container } from "./core/di/container";
 
 const isDevelopment = process.env.NODE_ENV == "development";
 
-export const setupApp = async () => {
+/**
+ * GraphQL context type with DI container and request.
+ */
+export interface GraphQLContext {
+  req: express.Request;
+  container: Container;
+}
+
+export const setupApp = async (container: Container) => {
   const app = express();
 
   setupMiddlewares(app);
 
-  const server = new ApolloServer({
+  const server = new ApolloServer<GraphQLContext>({
     schema: characterCatalogSchema,
     formatError: (formattedError, error): GraphQLFormattedError => {
       const originalError = (error as any)?.originalError;
@@ -53,7 +62,10 @@ export const setupApp = async () => {
   app.use(
     "/graphql",
     expressMiddleware(server, {
-      context: async ({ req }) => ({ req }),
+      context: async ({ req }): Promise<GraphQLContext> => ({
+        req: req as any as express.Request,
+        container,
+      }),
     }) as unknown as RequestHandler
   );
 

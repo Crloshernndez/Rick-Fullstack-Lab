@@ -61,6 +61,8 @@ services:
       - REDIS_PORT=6379
       - REDIS_DB=${REDIS_DB:-0}
       - ENVIRONMENT=${ENVIRONMENT}
+      - RICK_AND_MORTY_API_URL=${RICK_AND_MORTY_API_URL}
+      - INITIAL_CHARACTERS=${INITIAL_CHARACTERS}
     depends_on:
       db:
         condition: service_healthy

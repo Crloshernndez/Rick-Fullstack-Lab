@@ -3,8 +3,9 @@ import { EntityId } from "../../../../shared/domain/value-objects/entity-id";
 import { Timestamp } from "../../../../shared/domain/value-objects/timestamp";
 import { Count } from "../../../../shared/domain/value-objects/count";
 import { DurationMs } from "../../../../shared/domain/value-objects/duration-ms";
-import { CronLogStatus } from "../value-objects/cron-log-status.value-object";
-import { ErrorPayload } from "../value-objects/error-payload.value-object";
+import { CronLogStatus } from "../value-objects/cron-log-status";
+import { ErrorPayload } from "../value-objects/error-payload";
+import { SyncType } from "../value-objects/sync-type";
 
 /**
  * Properties required to construct a CronLog entity.
@@ -12,6 +13,7 @@ import { ErrorPayload } from "../value-objects/error-payload.value-object";
 export interface CronLogProps {
   id?: EntityId;
   executionDate: Timestamp;
+  syncType: SyncType;
   addedCount?: Count;
   updatedCount?: Count;
   deprecatedCount?: Count;
@@ -36,6 +38,7 @@ export interface CronLogProps {
  */
 export class CronLog extends Entity<EntityId> {
   private readonly _executionDate: Timestamp;
+  private readonly _syncType: SyncType;
   private readonly _addedCount: Count;
   private readonly _updatedCount: Count;
   private readonly _deprecatedCount: Count;
@@ -52,12 +55,17 @@ export class CronLog extends Entity<EntityId> {
     super(props.id || EntityId.generate(), props.createdAt);
 
     this._executionDate = props.executionDate;
+    this._syncType = props.syncType;
     this._addedCount = props.addedCount || Count.zero();
     this._updatedCount = props.updatedCount || Count.zero();
     this._deprecatedCount = props.deprecatedCount || Count.zero();
     this._status = props.status;
-    this._errorPayload = props.errorPayload;
-    this._durationMs = props.durationMs;
+    if (props.errorPayload) {
+      this._errorPayload = props.errorPayload;
+    }
+    if (props.durationMs) {
+      this._durationMs = props.durationMs;
+    }
   }
 
   /**
@@ -68,6 +76,7 @@ export class CronLog extends Entity<EntityId> {
    */
   static createSuccess(props: {
     executionDate: Timestamp;
+    syncType: SyncType;
     addedCount?: Count;
     updatedCount?: Count;
     deprecatedCount?: Count;
@@ -87,6 +96,7 @@ export class CronLog extends Entity<EntityId> {
    */
   static createFailure(props: {
     executionDate: Timestamp;
+    syncType: SyncType;
     errorPayload: ErrorPayload;
     durationMs?: DurationMs;
   }): CronLog {
@@ -103,6 +113,15 @@ export class CronLog extends Entity<EntityId> {
    */
   get executionDate(): Timestamp {
     return this._executionDate;
+  }
+
+  /**
+   * Returns the type of synchronization (initial, scheduled, manual).
+   *
+   * @returns The SyncType value object.
+   */
+  get syncType(): SyncType {
+    return this._syncType;
   }
 
   /**
@@ -165,9 +184,7 @@ export class CronLog extends Entity<EntityId> {
    * @returns The total operation count.
    */
   getTotalOperations(): Count {
-    return this._addedCount
-      .add(this._updatedCount)
-      .add(this._deprecatedCount);
+    return this._addedCount.add(this._updatedCount).add(this._deprecatedCount);
   }
 
   /**
@@ -206,6 +223,7 @@ export class CronLog extends Entity<EntityId> {
     return {
       id: this._id.toValue(),
       executionDate: this._executionDate.toISOString(),
+      syncType: this._syncType.toValue(),
       addedCount: this._addedCount.toValue(),
       updatedCount: this._updatedCount.toValue(),
       deprecatedCount: this._deprecatedCount.toValue(),

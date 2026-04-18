@@ -6,8 +6,9 @@ import { Favorite } from "../../modules/user-preferences/infrastructure/persiste
 import { Comment } from "../../modules/user-preferences/infrastructure/persistence/sequelize/models/Comment.model";
 import { CronLog } from "../../modules/data-sync/infrastructure/persistence/sequelize/models/CronLog.model";
 
-const { getDatabaseConfig } = require("./config");
-const config = getDatabaseConfig();
+import { getDatabaseConfig } from "./config";
+
+const config = getDatabaseConfig(process.env.NODE_ENV);
 
 export const sequelize = new Sequelize({
   ...config,

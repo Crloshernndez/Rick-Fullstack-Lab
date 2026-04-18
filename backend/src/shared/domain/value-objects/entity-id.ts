@@ -1,6 +1,9 @@
-import { randomUUID, validate as validateUUID } from "crypto";
+import { randomUUID } from "crypto";
 import { ValueObject } from "../value-object";
 import { ValidationException } from "../../exceptions/application-errors";
+
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 /**
  * Value Object representing a universally unique identifier (UUID) for domain entities.
@@ -20,7 +23,7 @@ export class EntityId extends ValueObject<string> {
    */
 
   protected validate(value: string): void {
-    if (!validateUUID(value)) {
+    if (!UUID_REGEX.test(value)) {
       throw new ValidationException("Invalid UUID format", { value });
     }
   }
