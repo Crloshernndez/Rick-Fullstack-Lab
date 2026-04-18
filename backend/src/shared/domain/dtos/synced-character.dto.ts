@@ -15,10 +15,10 @@ export interface SyncedCharacterDTO {
   image?: string;
   origin?: {
     name: string;
-    url: string;
+    id: number | null;
   };
   location?: {
     name: string;
-    url: string;
+    id: number | null;
   };
 }

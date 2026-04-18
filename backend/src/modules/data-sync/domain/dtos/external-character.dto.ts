@@ -6,7 +6,7 @@
  * coupling with domain entities.
  */
 export interface ExternalCharacterDTO {
-  id: number;
+  id: string | number;
   name: string;
   status: string;
   species: string;
@@ -14,11 +14,11 @@ export interface ExternalCharacterDTO {
   gender: string;
   origin: {
     name: string;
-    url: string;
+    id: string | number | null;
   };
   location: {
     name: string;
-    url: string;
+    id: string | number | null;
   };
   image: string;
   episode: string[];

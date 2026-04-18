@@ -138,12 +138,25 @@ export class SyncCharactersUseCase {
 
       if (currentPage === 1) stats.totalPages = response.info.pages;
 
-      const pageResult = await this.processPage(response.results);
+      // Limit results if maxCharacters is set
+      let resultsToProcess = response.results;
+      if (maxCharacters) {
+        const remaining = maxCharacters - stats.charactersSynced;
+        if (remaining < response.results.length) {
+          resultsToProcess = response.results.slice(0, remaining);
+        }
+      }
+
+      const pageResult = await this.processPage(resultsToProcess);
 
       stats.addedCount += pageResult.addedCount;
       stats.updatedCount += pageResult.updatedCount;
-      stats.charactersSynced += response.results.length;
-      stats.allExternalIds.push(...response.results.map((char) => char.id));
+      stats.charactersSynced += resultsToProcess.length;
+      stats.allExternalIds.push(
+        ...resultsToProcess.map((char) =>
+          typeof char.id === "string" ? parseInt(char.id, 10) : char.id
+        )
+      );
 
       if (
         !response.info.next ||
@@ -185,14 +198,37 @@ export class SyncCharactersUseCase {
     external: ExternalCharacterDTO
   ): SyncedCharacterDTO {
     const dto: SyncedCharacterDTO = {
-      externalId: external.id,
+      externalId:
+        typeof external.id === "string"
+          ? parseInt(external.id, 10)
+          : external.id,
       name: external.name,
       status: external.status,
       species: external.species,
       gender: external.gender,
       image: external.image,
-      origin: external.origin,
-      location: external.location,
+      origin: external.origin
+        ? {
+            name: external.origin.name,
+            id:
+              external.origin.id === null
+                ? null
+                : typeof external.origin.id === "string"
+                ? parseInt(external.origin.id, 10)
+                : external.origin.id,
+          }
+        : undefined,
+      location: external.location
+        ? {
+            name: external.location.name,
+            id:
+              external.location.id === null
+                ? null
+                : typeof external.location.id === "string"
+                ? parseInt(external.location.id, 10)
+                : external.location.id,
+          }
+        : undefined,
     };
 
     // Only include type if it has a value

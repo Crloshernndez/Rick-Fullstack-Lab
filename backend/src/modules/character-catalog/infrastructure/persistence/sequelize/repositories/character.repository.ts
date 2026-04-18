@@ -159,13 +159,13 @@ export class CharacterRepository implements CharacterRepositoryPort {
       ...(model.origin && {
         origin: new CharacterOrigin({
           name: model.origin.name,
-          url: model.origin.url,
+          id: model.origin.id,
         }),
       }),
       ...(model.location && {
         location: new CharacterLocation({
           name: model.location.name,
-          url: model.location.url,
+          id: model.location.id,
         }),
       }),
       ...(model.lastImportedAt && {

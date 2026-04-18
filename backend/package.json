@@ -9,7 +9,11 @@
     "dev": "ts-node src/server.ts",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "migrate": "sequelize db:migrate",
+    "migrate:undo": "sequelize db:migrate:undo",
+    "migrate:status": "sequelize db:migrate:status",
+    "sync:initial": "ts-node src/scripts/initial-sync.ts"
   },
   "keywords": [],
   "author": "",

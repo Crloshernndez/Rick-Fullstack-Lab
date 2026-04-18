@@ -149,13 +149,13 @@ export class BulkCreateOrUpdateCharactersUseCase
       ...(dto.origin && {
         origin: new CharacterOrigin({
           name: dto.origin.name,
-          url: dto.origin.url,
+          id: dto.origin.id,
         }),
       }),
       ...(dto.location && {
         location: new CharacterLocation({
           name: dto.location.name,
-          url: dto.location.url,
+          id: dto.location.id,
         }),
       }),
     });
@@ -184,13 +184,13 @@ export class BulkCreateOrUpdateCharactersUseCase
       ...(dto.origin && {
         origin: new CharacterOrigin({
           name: dto.origin.name,
-          url: dto.origin.url,
+          id: dto.origin.id,
         }),
       }),
       ...(dto.location && {
         location: new CharacterLocation({
           name: dto.location.name,
-          url: dto.location.url,
+          id: dto.location.id,
         }),
       }),
     });

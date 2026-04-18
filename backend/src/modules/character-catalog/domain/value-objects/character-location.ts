@@ -2,13 +2,14 @@ import { ValueObject } from "../../../../shared/domain/value-object";
 import { ValidationException } from "../../../../shared/exceptions/application-errors";
 import { Name } from "../../../../shared/domain/value-objects/name";
 import { Url } from "../../../../shared/domain/value-objects/url";
+import { ExternalId } from "./external-id";
 
 /**
  * Interface representing the structure of an Location object.
  */
 export interface LocationData {
   name: string;
-  url: string;
+  id: number | null;
 }
 
 /**
@@ -21,7 +22,7 @@ export interface LocationData {
  */
 export class CharacterLocation extends ValueObject<LocationData> {
   private readonly name: Name;
-  private readonly url: Url;
+  private readonly id: ExternalId | null;
 
   /**
    * Creates a new Location value object.
@@ -32,7 +33,7 @@ export class CharacterLocation extends ValueObject<LocationData> {
   constructor(value: LocationData) {
     super(value);
     this.name = new Name(value.name);
-    this.url = new Url(value.url);
+    this.id = value.id !== null ? new ExternalId(value.id) : null;
   }
 
   /**
@@ -46,9 +47,9 @@ export class CharacterLocation extends ValueObject<LocationData> {
       throw new ValidationException("Location must be an object", { value });
     }
 
-    if (!value.name || !value.url) {
+    if (!value.name || value.id === undefined) {
       throw new ValidationException(
-        "Location must contain both name and url properties",
+        "Location must contain both name and id properties",
         { value }
       );
     }
@@ -64,7 +65,7 @@ export class CharacterLocation extends ValueObject<LocationData> {
   toObject(): LocationData {
     return {
       name: this.name.toValue(),
-      url: this.url.toValue(),
+      id: this.id ? this.id.toValue() : null,
     };
   }
 }

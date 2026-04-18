@@ -21,15 +21,55 @@ export class ErrorPayload extends ValueObject<string> {
    */
   protected validate(value: string): void {
     if (typeof value !== "string") {
-      throw new ValidationException("Error payload must be a string", { value });
+      throw new ValidationException("Error payload must be a string", {
+        value,
+      });
     }
 
     if (value.length > ErrorPayload.MAX_LENGTH) {
       throw new ValidationException(
         `Error payload must not exceed ${ErrorPayload.MAX_LENGTH} characters`,
-        { value: value.substring(0, 100) + "...", maxLength: ErrorPayload.MAX_LENGTH }
+        {
+          value: value.substring(0, 100) + "...",
+          maxLength: ErrorPayload.MAX_LENGTH,
+        }
       );
     }
+  }
+
+  /**
+   * Factory method that reconstructs an `ErrorPayload` from a previously serialized JSON object.
+   *
+   * Intended to be used as the counterpart of `toJSON()`, for example when
+   * reading error information from a database or an API response.
+   *
+   * @param json - The JSON object produced by `toJSON()`.
+   * @returns A new `ErrorPayload` instance reconstructed from the serialized payload.
+   * @throws {ValidationException} If the payload field is missing or invalid.
+   */
+  static fromJSON(json: {
+    payload: string;
+    length: number;
+    truncated: string;
+  }): ErrorPayload {
+    return new ErrorPayload(json.payload);
+  }
+
+  /**
+   * Serializes the error payload to a JSON-compatible structure.
+   *
+   * Useful when persisting error information to a database or
+   * sending it through an API response.
+   *
+   * @returns An object containing the full payload, its length,
+   * and a truncated preview for display purposes.
+   */
+  toJSON(): { payload: string; length: number; truncated: string } {
+    return {
+      payload: this._value,
+      length: this._value.length,
+      truncated: this.getTruncated(),
+    };
   }
 
   /**

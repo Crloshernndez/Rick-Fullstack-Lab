@@ -30,7 +30,9 @@ export class CronLogRepository implements CronLogRepositoryPort {
       await CronLogModel.create(data);
     } catch (error) {
       throw new RepositoryException(
-        `Failed to save cron log: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to save cron log: ${
+          error instanceof Error ? error.message : String(error)
+        }`
       );
     }
   }
@@ -50,7 +52,9 @@ export class CronLogRepository implements CronLogRepositoryPort {
       return model ? this.toDomain(model) : undefined;
     } catch (error) {
       throw new RepositoryException(
-        `Failed to find latest cron log: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to find latest cron log: ${
+          error instanceof Error ? error.message : String(error)
+        }`
       );
     }
   }
@@ -72,7 +76,9 @@ export class CronLogRepository implements CronLogRepositoryPort {
       return count > 0;
     } catch (error) {
       throw new RepositoryException(
-        `Failed to check initial sync: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to check initial sync: ${
+          error instanceof Error ? error.message : String(error)
+        }`
       );
     }
   }
@@ -97,7 +103,7 @@ export class CronLogRepository implements CronLogRepositoryPort {
       status: new CronLogStatus(model.status),
       createdAt: Timestamp.from(model.createdAt),
       ...(model.errorPayload && {
-        errorPayload: ErrorPayload.fromJSON(model.errorPayload),
+        errorPayload: new ErrorPayload(model.errorPayload),
       }),
       ...(model.durationMs && { durationMs: new DurationMs(model.durationMs) }),
     });
@@ -120,7 +126,7 @@ export class CronLogRepository implements CronLogRepositoryPort {
       updatedCount: entity.updatedCount.toValue(),
       deprecatedCount: entity.deprecatedCount.toValue(),
       status: entity.status.toValue(),
-      errorPayload: entity.errorPayload?.toJSON(),
+      errorPayload: entity.errorPayload?.toValue(),
       durationMs: entity.durationMs?.toValue(),
       createdAt: entity.createdAt.toValue(),
     };

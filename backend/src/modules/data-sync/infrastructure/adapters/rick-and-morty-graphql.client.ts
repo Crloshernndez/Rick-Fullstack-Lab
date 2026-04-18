@@ -69,14 +69,13 @@ export class RickAndMortyGraphqlClient implements SourceApiClientPort {
           gender
           origin {
             name
-            url
+            id
           }
           location {
             name
-            url
+            id
           }
           image
-          url
           created
         }
       }
