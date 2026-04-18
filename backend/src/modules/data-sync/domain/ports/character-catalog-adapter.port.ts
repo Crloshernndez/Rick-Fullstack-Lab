@@ -1,4 +1,4 @@
-import { SyncedCharacterDTO } from "../dtos/synced-character.dto";
+import { SyncedCharacterDTO } from "../../../../shared/domain/dtos/synced-character.dto";
 
 /**
  * Port defining the contract for communicating with the character-catalog bounded context.

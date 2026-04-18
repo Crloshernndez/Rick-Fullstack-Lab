@@ -1,7 +1,7 @@
 import { CharacterCatalogAdapterPort } from "../../domain/ports/character-catalog-adapter.port";
-import { SyncedCharacterDTO } from "../../domain/dtos/synced-character.dto";
-import { BulkCreateOrUpdateCharactersUseCasePort } from "../../../character-catalog/domain/ports/bulk-create-or-update-characters-use-case.port";
-import { MarkCharactersAsDeprecatedUseCasePort } from "../../../character-catalog/domain/ports/mark-characters-as-deprecated-use-case.port";
+import { SyncedCharacterDTO } from "../../../../shared/domain/dtos/synced-character.dto";
+import { BulkCreateOrUpdateCharactersUseCasePort } from "../../../../shared/domain/ports/bulk-create-or-update-characters-use-case.port";
+import { MarkCharactersAsDeprecatedUseCasePort } from "../../../../shared/domain/ports/mark-characters-as-deprecated-use-case.port";
 
 /**
  * Adapter that bridges the data-sync context with the character-catalog context.

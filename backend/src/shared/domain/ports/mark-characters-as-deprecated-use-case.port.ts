@@ -4,6 +4,9 @@
  * This port defines the contract for a use case that marks characters as deprecated
  * when they no longer exist in the external data source. It compares the provided
  * list of current external IDs with the database and marks missing ones as deprecated.
+ *
+ * Shared port that can be used by multiple bounded contexts to maintain
+ * loose coupling while enabling cross-context communication.
  */
 export interface MarkCharactersAsDeprecatedUseCasePort {
   /**

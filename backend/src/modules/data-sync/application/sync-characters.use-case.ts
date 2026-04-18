@@ -1,7 +1,7 @@
 import { SourceApiClientPort } from "../domain/ports/source-api-client-port";
 import { CharacterCatalogAdapterPort } from "../domain/ports/character-catalog-adapter.port";
 import { ExternalCharacterDTO } from "../domain/dtos/external-character.dto";
-import { SyncedCharacterDTO } from "../domain/dtos/synced-character.dto";
+import { SyncedCharacterDTO } from "../../../shared/domain/dtos/synced-character.dto";
 import { SyncLoggerService } from "../domain/services/sync-logger.service";
 import { Timestamp } from "../../../shared/domain/value-objects/timestamp";
 import { SyncType } from "../domain/value-objects/sync-type";

@@ -1,4 +1,4 @@
-import { SyncedCharacterDTO } from "../../../data-sync/domain/dtos/synced-character.dto";
+import { SyncedCharacterDTO } from "../dtos/synced-character.dto";
 
 /**
  * Port interface for bulk character creation/update use case.
@@ -6,6 +6,9 @@ import { SyncedCharacterDTO } from "../../../data-sync/domain/dtos/synced-charac
  * This port defines the contract for a use case that processes multiple characters
  * at once, optimizing database operations through bulk inserts/updates instead of
  * individual operations.
+ *
+ * Shared port that can be used by multiple bounded contexts to maintain
+ * loose coupling while enabling cross-context communication.
  */
 export interface BulkCreateOrUpdateCharactersUseCasePort {
   /**
