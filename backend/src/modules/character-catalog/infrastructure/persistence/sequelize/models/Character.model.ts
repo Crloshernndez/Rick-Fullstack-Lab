@@ -10,8 +10,8 @@ import {
   HasMany,
   Index,
 } from "sequelize-typescript";
-import { Favorite } from "./Favorite.model";
-import { Comment } from "./Comment.model";
+import { Favorite } from "../../../../../../modules/user-preferences/infrastructure/persistence/sequelize/models/Favorite.model";
+import { Comment } from "../../../../../../modules/user-preferences/infrastructure/persistence/sequelize/models/Comment.model";
 
 export enum SyncStatus {
   SYNCED = "synced",

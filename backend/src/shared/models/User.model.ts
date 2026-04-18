@@ -9,8 +9,8 @@ import {
   UpdatedAt,
   HasMany,
 } from "sequelize-typescript";
-import { Favorite } from "../../modules/character-catalog/infrastructure/persistence/sequelize/models/Favorite.model";
-import { Comment } from "../../modules/character-catalog/infrastructure/persistence/sequelize/models/Comment.model";
+import { Favorite } from "../../modules/user-preferences/infrastructure/persistence/sequelize/models/Favorite.model";
+import { Comment } from "../../modules/user-preferences/infrastructure/persistence/sequelize/models/Comment.model";
 
 @Table({
   tableName: "users",

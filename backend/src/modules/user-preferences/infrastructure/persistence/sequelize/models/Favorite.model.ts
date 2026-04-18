@@ -9,28 +9,26 @@ import {
   UpdatedAt,
   ForeignKey,
   BelongsTo,
+  Index,
 } from "sequelize-typescript";
 import { User } from "../../../../../../shared/models/User.model";
-import { Character } from "./Character.model";
+import { Character } from "../../../../../character-catalog/infrastructure/persistence/sequelize/models/Character.model";
 
 @Table({
-  tableName: "comments",
+  tableName: "favorites",
   timestamps: true,
+  indexes: [
+    {
+      unique: true,
+      fields: ["user_id", "character_id"],
+    },
+  ],
 })
-export class Comment extends Model {
+export class Favorite extends Model {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
   declare id: string;
-
-  @Column({
-    type: DataType.TEXT,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-    },
-  })
-  declare content: string;
 
   @ForeignKey(() => User)
   @Column({
