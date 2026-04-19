@@ -15,7 +15,7 @@
  */
 
 // Cache
-// import RedisCache from "../cache/redis-client";
+import RedisCache from "../cache/redis-client";
 
 // Repositories
 import { CharacterRepository } from "../../modules/character-catalog/infrastructure/persistence/sequelize/repositories/character.repository";
@@ -45,7 +45,7 @@ import { CharacterController } from "../../modules/character-catalog/infrastruct
  */
 export class Container {
   // Cache
-  // public readonly cache: RedisCache;
+  public readonly cache: RedisCache;
 
   // Repositories
   public readonly characterRepository: CharacterRepository;
@@ -72,7 +72,7 @@ export class Container {
 
   constructor() {
     // Initialize Cache
-    // this.cache = RedisCache.getInstance();
+    this.cache = RedisCache.getInstance();
 
     // Initialize Repositories
     this.characterRepository = new CharacterRepository();
@@ -86,8 +86,8 @@ export class Container {
       new MarkCharactersAsDeprecatedUseCase(this.characterRepository);
 
     this.getCharactersUseCase = new GetCharactersUseCase(
-      this.characterRepository
-      // this.cache
+      this.characterRepository,
+      this.cache
     );
 
     // Initialize Data Sync Services
