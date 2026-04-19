@@ -1,0 +1,12 @@
+@reference "tailwindcss";
+
+.list {
+  @apply flex flex-col;
+  @apply py-4 md:py-6;
+}
+
+.title {
+  @apply text-base md:text-lg font-bold;
+  @apply text-slate-900 mb-4;
+  font-family: 'Greycliff CF', sans-serif;
+}

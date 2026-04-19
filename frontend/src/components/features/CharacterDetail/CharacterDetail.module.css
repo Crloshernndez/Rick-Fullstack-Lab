@@ -1,0 +1,35 @@
+@reference "tailwindcss";
+
+/* Empty state */
+.emptyState {
+  @apply w-full h-full flex items-center justify-center;
+  @apply px-4;
+}
+
+.emptyText {
+  @apply text-slate-400 text-base md:text-lg text-center;
+}
+
+/* Container */
+.container {
+  @apply flex flex-col w-full max-w-4xl mx-auto ml-30;
+  @apply px-4 md:px-8 lg:px-0;
+}
+
+/* Header */
+.header {
+  @apply flex flex-col gap-4 md:gap-6;
+  @apply py-6 md:py-10;
+}
+
+.avatarContainer {
+  @apply flex flex-col items-center md:items-start gap-3 md:gap-4;
+}
+
+.name {
+  @apply text-2xl md:text-3xl lg:text-4xl font-black;
+  @apply text-slate-900;
+  @apply text-center md:text-left;
+  font-family: 'Greycliff CF', sans-serif;
+  line-height: 1;
+}
