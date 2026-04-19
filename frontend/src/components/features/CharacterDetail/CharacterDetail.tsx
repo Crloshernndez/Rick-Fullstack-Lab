@@ -1,8 +1,8 @@
 import { Avatar } from "@/components/ui/Avatar";
-import { Heart } from "@/components/ui/Heart";
 import { DetailList } from "@/components/ui/DetailList";
 import { DetailRow } from "@/components/ui/DetailRow";
 import styles from "./CharacterDetail.module.css";
+import { FavoriteButton } from "@/components/ui/FavoriteButton";
 
 interface CharacterDetailProps {
   character?: {
@@ -22,16 +22,19 @@ export function CharacterDetail({
   if (!character) {
     return (
       <div className={styles.emptyState}>
-        <p className={styles.emptyText}>
-          Select a character to view details
-        </p>
+        <p className={styles.emptyText}>Select a character to view details</p>
       </div>
     );
   }
 
   const favoriteBadge = isFavorite ? (
     <div className="w-6 h-6 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
-      <Heart className="w-3 h-3 text-white fill-current" />
+      <FavoriteButton
+        isFavorite={true}
+        onClick={() => console.log()}
+        visible={true}
+        size="sm"
+      />
     </div>
   ) : undefined;
 

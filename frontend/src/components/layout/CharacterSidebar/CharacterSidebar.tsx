@@ -19,6 +19,7 @@ interface CharacterSidebarProps {
   sorting: "ASC" | "DESC";
   activeFilterCount: number;
   loading: boolean;
+  onToggleFavorite: (id: number) => void;
 }
 
 export function CharacterSidebar({
@@ -32,6 +33,7 @@ export function CharacterSidebar({
   sorting,
   activeFilterCount = 0,
   loading = false,
+  onToggleFavorite,
 }: CharacterSidebarProps) {
   const toggleSort = () => {
     onSortChange(sorting === "ASC" ? "DESC" : "ASC");
@@ -100,6 +102,7 @@ export function CharacterSidebar({
                     isStarred={true}
                     isActive={selectedCharacterId === char.id}
                     onClick={() => onCharacterSelect(char.id)}
+                    onToggleFavorite={() => onToggleFavorite(char.id)}
                   />
                 ))}
               </CharacterSection>
@@ -118,6 +121,7 @@ export function CharacterSidebar({
                   isStarred={false}
                   isActive={selectedCharacterId === char.id}
                   onClick={() => onCharacterSelect(char.id)}
+                  onToggleFavorite={() => onToggleFavorite(char.id)}
                 />
               ))}
             </CharacterSection>

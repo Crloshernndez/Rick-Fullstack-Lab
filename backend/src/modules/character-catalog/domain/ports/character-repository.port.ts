@@ -60,8 +60,9 @@ export interface CharacterRepositoryPort {
    * Updates a single character.
    *
    * @param character - Character entity to update.
+   * @returns The updated character entity.
    */
-  update(character: Character): Promise<void>;
+  update(character: Character): Promise<Character>;
 
   /**
    * Creates multiple characters in a single bulk operation.

@@ -6,6 +6,7 @@ import {
   RepositoryException,
 } from "../../../../../../shared/exceptions/application-errors";
 import { DeleteCharacterUseCase } from "../../../../application/delete-character.use-case";
+import { ToggleFavoriteCharacterUseCase } from "../../../../application/toggle-favorite-character.use-case";
 
 /**
  * Controller for character GraphQL operations.
@@ -16,7 +17,8 @@ import { DeleteCharacterUseCase } from "../../../../application/delete-character
 export class CharacterController {
   constructor(
     private readonly getCharactersUseCase: GetCharactersUseCase,
-    private readonly deleteCharacterUseCase: DeleteCharacterUseCase
+    private readonly deleteCharacterUseCase: DeleteCharacterUseCase,
+    private readonly toggleFavoriteUseCase: ToggleFavoriteCharacterUseCase
   ) {}
 
   /**
@@ -94,6 +96,45 @@ export class CharacterController {
       throw new RepositoryException(
         "Failed to retrieve characters",
         error instanceof Error ? { originalError: error.message } : { error }
+      );
+    }
+  }
+
+  /**
+   * Handles the toggleFavorite mutation.
+   *
+   * @param id - The UUID of the character to update.
+   * @param isFavorite - The new favorite status.
+   * @returns Success response with updated character.
+   */
+  async toggleFavorite(
+    id: string,
+    isFavorite: boolean
+  ): Promise<{ success: boolean; character: any }> {
+    try {
+      const character = await this.toggleFavoriteUseCase.execute(
+        id,
+        isFavorite
+      );
+      return {
+        success: true,
+        character: character.toObject(),
+      };
+    } catch (error) {
+      console.error('Error in toggleFavorite controller:', error);
+      // Re-throw application errors as-is
+      if (
+        error instanceof ValidationException ||
+        error instanceof NotFoundException ||
+        error instanceof RepositoryException
+      ) {
+        throw error;
+      }
+
+      // Wrap unexpected errors
+      throw new RepositoryException(
+        "Failed to toggle favorite status",
+        error instanceof Error ? { originalError: error.message, stack: error.stack } : { error }
       );
     }
   }

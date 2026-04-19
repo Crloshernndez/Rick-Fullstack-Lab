@@ -200,13 +200,20 @@ class RedisCache implements CachePort {
   async flushNamespace(namespace: string): Promise<number> {
     const client = await this.ensureConnection();
     const pattern = `${namespace}:*`;
-    let count = 0;
+    const allKeys: string[] = [];
 
-    for await (const key of client.scanIterator({ MATCH: pattern })) {
-      await client.del(key);
-      count++;
+    for await (const batch of client.scanIterator({
+      MATCH: pattern,
+      COUNT: 100,
+    })) {
+      allKeys.push(...batch);
     }
-    return count;
+
+    if (allKeys.length > 0) {
+      await client.del(allKeys);
+    }
+
+    return allKeys.length;
   }
 
   /**

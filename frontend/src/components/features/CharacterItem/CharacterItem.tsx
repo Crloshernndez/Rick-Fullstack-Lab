@@ -32,7 +32,7 @@ export function CharacterItem({
 
   const containerClass = cn(
     styles.container,
-    isActive ? styles['container--active'] : styles['container--default']
+    isActive ? styles["container--active"] : styles["container--default"]
   );
 
   return (
@@ -46,12 +46,7 @@ export function CharacterItem({
       aria-label={`View ${name} details`}
     >
       {/* Avatar */}
-      <Avatar
-        src={imageUrl}
-        alt={name}
-        size="md"
-        className="md:w-12 md:h-12"
-      />
+      <Avatar src={imageUrl} alt={name} size="md" className="md:w-12 md:h-12" />
 
       {/* Content */}
       <div className={styles.content}>
@@ -63,9 +58,13 @@ export function CharacterItem({
       <FavoriteButton
         isFavorite={isStarred}
         onClick={handleHeartClick}
-        visible={isStarred || isHovered}
+        visible={true}
         size="md"
-        label={isStarred ? `Remove ${name} from favorites` : `Add ${name} to favorites`}
+        label={
+          isStarred
+            ? `Remove ${name} from favorites`
+            : `Add ${name} to favorites`
+        }
       />
     </article>
   );

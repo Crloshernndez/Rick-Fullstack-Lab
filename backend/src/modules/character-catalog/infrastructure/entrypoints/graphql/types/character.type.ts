@@ -12,6 +12,7 @@ export const characterTypeDefs = `
     image: String
     isSynced: Boolean!
     isDeprecated: Boolean!
+    isFavorite: Boolean!
     createdAt: String!
     updatedAt: String!
     lastSyncAt: String
@@ -52,11 +53,17 @@ export const characterTypeDefs = `
     message: String!
   }
 
+  type ToggleFavoriteResponse {
+    success: Boolean!
+    character: Character!
+  }
+
   type Query {
     characters(page: Int, limit: Int, filters: CharacterFilters, sorting: String): CharacterConnection!
   }
 
   type Mutation {
     deleteCharacter(id: ID!): DeleteCharacterResponse!
+    toggleFavorite(id: ID!, isFavorite: Boolean!): ToggleFavoriteResponse!
   }
 `;

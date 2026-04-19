@@ -35,6 +35,7 @@ export interface CharacterProps {
   location?: CharacterLocation;
   syncStatus?: SyncStatus;
   isActive?: boolean;
+  isFavorite?: boolean;
   lastImportedAt?: Timestamp;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
@@ -61,6 +62,7 @@ export class Character extends Entity<EntityId> {
   private _location?: CharacterLocation;
   private _syncStatus: SyncStatus;
   private _isActive: boolean;
+  private _isFavorite: boolean;
   private _lastImportedAt?: Timestamp;
 
   /**
@@ -82,6 +84,7 @@ export class Character extends Entity<EntityId> {
     this._location = props.location;
     this._syncStatus = SyncStatus.SYNCED;
     this._isActive = props.isActive ?? true;
+    this._isFavorite = props.isFavorite ?? false;
     this._lastImportedAt = props.lastImportedAt;
   }
 
@@ -139,6 +142,10 @@ export class Character extends Entity<EntityId> {
 
   get isActive(): boolean {
     return this._isActive;
+  }
+
+  get isFavorite(): boolean {
+    return this._isFavorite;
   }
 
   get lastImportedAt(): Timestamp | undefined {
@@ -211,6 +218,25 @@ export class Character extends Entity<EntityId> {
   }
 
   /**
+   * Toggles the favorite status of the character.
+   */
+  toggleFavorite(): void {
+    this._isFavorite = !this._isFavorite;
+    this.touch();
+  }
+
+  /**
+   * Sets the favorite status of the character.
+   *
+   * @param isFavorite - The favorite status to set.
+   */
+  setFavorite(isFavorite: boolean): void {
+    this._isFavorite = isFavorite;
+    this.touch();
+  }
+
+
+  /**
    * Converts the character entity to a plain object representation.
    *
    * @returns A plain object containing all character properties.
@@ -229,6 +255,7 @@ export class Character extends Entity<EntityId> {
       location: this._location?.toObject(),
       syncStatus: this._syncStatus,
       isActive: this._isActive,
+      isFavorite: this._isFavorite,
       lastImportedAt: this._lastImportedAt?.toISOString(),
       createdAt: this._createdAt.toISOString(),
       updatedAt: this._updatedAt.toISOString(),

@@ -167,14 +167,17 @@ export class CharacterRepository implements CharacterRepositoryPort {
    * Updates a single character.
    *
    * @param character - Character domain entity to update.
+   * @returns The updated character domain entity.
    * @throws {RepositoryException} If update operation fails.
    */
-  async update(character: CharacterEntity): Promise<void> {
+  async update(character: CharacterEntity): Promise<CharacterEntity> {
     try {
       const data = this.toPersistence(character);
       await CharacterModel.update(data, {
         where: { id: character.id.toValue() },
       });
+
+      return character;
     } catch (error) {
       throw new RepositoryException(
         `Failed to update character: ${
@@ -250,6 +253,7 @@ export class CharacterRepository implements CharacterRepositoryPort {
       name: new Name(model.name),
       syncStatus: model.syncStatus as SyncStatus,
       isActive: model.isActive,
+      isFavorite: model.isFavorite,
       createdAt: Timestamp.from(model.createdAt),
       updatedAt: Timestamp.from(model.updatedAt),
       ...(model.status && { status: new CharacterStatus(model.status) }),
@@ -297,6 +301,7 @@ export class CharacterRepository implements CharacterRepositoryPort {
       location: entity.location?.toObject(),
       syncStatus: entity.syncStatus,
       isActive: entity.isActive,
+      isFavorite: entity.isFavorite,
       lastImportedAt: entity.lastImportedAt?.toValue(),
       createdAt: entity.createdAt.toValue(),
       updatedAt: entity.updatedAt.toValue(),

@@ -25,6 +25,20 @@ export const GET_CHARACTERS = gql`
         status
         species
         image
+        isFavorite
+      }
+    }
+  }
+`;
+
+export const TOGGLE_FAVORITE = gql`
+  mutation ToggleFavorite($id: ID!, $isFavorite: Boolean!) {
+    toggleFavorite(id: $id, isFavorite: $isFavorite) {
+      success
+      character {
+        id
+        name
+        isFavorite
       }
     }
   }
