@@ -1,0 +1,52 @@
+@reference "tailwindcss";
+
+.button {
+  @apply flex items-center justify-center flex-shrink-0;
+  @apply rounded-full border-none bg-transparent;
+  @apply cursor-pointer;
+  @apply transition-all duration-150;
+}
+
+/* Size variants */
+.button--sm {
+  @apply w-6 h-6;
+}
+
+.button--md {
+  @apply w-8 h-8;
+}
+
+.button--lg {
+  @apply w-10 h-10;
+}
+
+/* State variants */
+.button--hidden {
+  @apply opacity-0 pointer-events-none;
+}
+
+.button--visible {
+  @apply opacity-100;
+}
+
+.button--favorite {
+  color: #22C55E; /* green-500 */
+}
+
+.button--unfavorite {
+  color: #E2E8F0; /* slate-200 */
+}
+
+/* Hover effects */
+.button:hover {
+  @apply scale-110;
+}
+
+.button:active {
+  @apply scale-95;
+}
+
+/* Focus visible for accessibility */
+.button:focus-visible {
+  @apply outline-2 outline-offset-2 outline-purple-500;
+}

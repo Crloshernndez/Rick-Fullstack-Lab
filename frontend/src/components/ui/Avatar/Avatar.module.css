@@ -1,0 +1,72 @@
+@reference "tailwindcss";
+
+.avatar {
+  @apply flex-shrink-0 rounded-full overflow-hidden;
+  @apply relative;
+}
+
+.avatar img {
+  @apply w-full h-full object-cover;
+}
+
+/* Size variants */
+.avatar--xs {
+  @apply w-8 h-8;
+}
+
+.avatar--sm {
+  @apply w-10 h-10;
+}
+
+.avatar--md {
+  @apply w-12 h-12;
+}
+
+.avatar--lg {
+  @apply w-16 h-16;
+}
+
+.avatar--xl {
+  @apply w-20 h-20;
+}
+
+.avatar--2xl {
+  @apply w-24 h-24;
+}
+
+/* Border variants */
+.avatar--bordered {
+  @apply border-2 border-slate-100;
+}
+
+.avatar--shadow {
+  @apply shadow-lg;
+}
+
+/* Badge container (para favoritos, etc) */
+.badge {
+  @apply absolute;
+  @apply flex items-center justify-center;
+  @apply rounded-full;
+  @apply border-4 border-white;
+}
+
+.badge--bottomRight {
+  @apply bottom-0 right-0;
+}
+
+.badge--topRight {
+  @apply top-0 right-0;
+}
+
+.badge--xs {
+  @apply w-4 h-4;
+}
+
+.badge--sm {
+  @apply w-5 h-5;
+}
+
+.badge--md {
+  @apply w-6 h-6;
+}

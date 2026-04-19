@@ -1,0 +1,46 @@
+@reference "tailwindcss";
+
+/* Sidebar container */
+.sidebar {
+  @apply w-full md:w-[375px] flex flex-col flex-shrink-0;
+  background-color: #F8F8F8;
+}
+
+/* Header */
+.header {
+  @apply flex items-end flex-shrink-0;
+  width: 100%;
+  height: 82px;
+  padding-top: 42px;
+  background-color: #F8F8F8;
+}
+
+.headerContent {
+  @apply flex items-center;
+  width: 100%;
+  height: 40px;
+  padding: 0 24px 8px 24px;
+  gap: 10px;
+}
+
+.title {
+  @apply text-xl md:text-2xl font-black text-black tracking-tight leading-none;
+}
+
+/* Search bar container */
+.searchContainer {
+  @apply px-4 py-3 flex-shrink-0;
+}
+
+/* Character list container */
+.listContainer {
+  @apply flex-1 px-4 py-2 flex flex-col gap-4 md:gap-6;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.listContainer::-webkit-scrollbar {
+  display: none;
+}

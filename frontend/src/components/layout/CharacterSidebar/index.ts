@@ -1,0 +1,1 @@
+export { CharacterSidebar } from './CharacterSidebar';

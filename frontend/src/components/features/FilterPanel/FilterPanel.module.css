@@ -1,0 +1,30 @@
+@reference "tailwindcss";
+
+/* Panel container */
+.panel {
+  @apply w-full max-w-[343px] rounded-xl bg-white p-6;
+  @apply flex flex-col gap-6;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.10);
+}
+
+/* Filter action button */
+.filterButton {
+  @apply w-full h-12 rounded-lg border-none;
+  @apply font-semibold text-base;
+  @apply transition-all duration-200;
+  font-family: 'Greycliff CF', sans-serif;
+}
+
+.filterButton--active {
+  background-color: #8054C7;
+  @apply text-white cursor-pointer;
+}
+
+.filterButton--active:hover {
+  @apply opacity-90;
+}
+
+.filterButton--disabled {
+  background-color: #F1F5F9;
+  @apply text-slate-400 cursor-not-allowed;
+}

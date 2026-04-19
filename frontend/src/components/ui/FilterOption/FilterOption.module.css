@@ -1,0 +1,29 @@
+@reference "tailwindcss";
+
+.option {
+  @apply flex-1 h-12 rounded-lg;
+  @apply font-medium text-base cursor-pointer;
+  @apply transition-all duration-150;
+  font-family: 'Greycliff CF', sans-serif;
+}
+
+.option--default {
+  @apply bg-white text-slate-900;
+  border: 1.5px solid #E2E8F0;
+  font-weight: 500;
+}
+
+.option--selected {
+  @apply border-none;
+  background-color: #EEE3FF;
+  color: #6B21A8;
+  font-weight: 700;
+}
+
+.option--default:hover {
+  @apply bg-slate-50;
+}
+
+.option--default:active {
+  @apply scale-95;
+}

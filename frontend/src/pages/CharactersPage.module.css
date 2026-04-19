@@ -1,0 +1,19 @@
+@reference "../index.css";
+
+.container {
+  @apply flex flex-col md:flex-row h-screen font-greycliff;
+  background-color: #F8F8F8;
+}
+
+.loadingContainer,
+.errorContainer {
+  @apply flex h-screen items-center justify-center bg-white;
+}
+
+.errorText {
+  @apply text-red-500 text-center px-4;
+}
+
+.loadingText {
+  @apply text-slate-400 text-center;
+}

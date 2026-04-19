@@ -1,0 +1,23 @@
+@reference "tailwindcss";
+
+.row {
+  @apply flex flex-col gap-1;
+  @apply py-3 md:py-4;
+  @apply border-b border-slate-200;
+}
+
+.row:last-child {
+  @apply border-b-0;
+}
+
+.label {
+  @apply text-xs md:text-sm font-semibold;
+  @apply text-slate-500;
+  font-family: 'Greycliff CF', sans-serif;
+}
+
+.value {
+  @apply text-sm md:text-base font-medium;
+  @apply text-slate-700;
+  font-family: 'Greycliff CF', sans-serif;
+}

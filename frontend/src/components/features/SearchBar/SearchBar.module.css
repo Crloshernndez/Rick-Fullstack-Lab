@@ -1,0 +1,75 @@
+@reference "tailwindcss";
+
+/* Container */
+.container {
+  @apply relative;
+  width: 100%;
+  max-width: 343px;
+}
+
+/* Input container */
+.inputContainer {
+  @apply flex items-center gap-2;
+  @apply w-full md:w-[320px];
+  @apply h-12 md:h-[52px];
+  @apply px-4 md:px-6 py-2;
+  @apply ml-0 md:ml-2.5;
+  @apply rounded-2xl;
+  background-color: #F1F5F9;
+  transition: all 0.2s ease;
+}
+
+.inputContainer:focus-within {
+  @apply ring-2 ring-purple-200;
+}
+
+/* Search icon wrapper */
+.searchIcon {
+  @apply flex items-center justify-center flex-shrink-0;
+  @apply w-5 h-5;
+}
+
+/* Input field */
+.input {
+  @apply flex-1 border-none outline-none bg-transparent;
+  @apply text-sm md:text-base;
+  font-family: 'Greycliff CF', sans-serif;
+  font-weight: 500;
+  color: #0F172A;
+}
+
+.input::placeholder {
+  @apply text-slate-400;
+}
+
+/* Filter button */
+.filterButton {
+  @apply flex items-center justify-center flex-shrink-0;
+  @apply w-9 h-9 md:w-[38px] md:h-[38px];
+  @apply rounded-md;
+  @apply border-none cursor-pointer;
+  @apply transition-all duration-150;
+}
+
+.filterButton--default {
+  @apply bg-transparent;
+}
+
+.filterButton--open {
+  background-color: #EEE3FF;
+}
+
+.filterButton--active {
+  background-color: #8054C7;
+}
+
+.filterButton:hover {
+  @apply opacity-90;
+}
+
+/* Dropdown */
+.dropdown {
+  @apply absolute left-0 z-50;
+  @apply top-14 md:top-[60px];
+  @apply w-full;
+}
