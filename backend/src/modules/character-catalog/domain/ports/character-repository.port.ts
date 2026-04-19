@@ -2,6 +2,7 @@ import { PaginationInfo } from "../../../../shared/domain/value-objects/paginati
 import { Character } from "../entities/character.entity";
 import { CharacterFilters } from "../../application/dtos/character-filters.dto";
 import { ExternalId } from "../value-objects/external-id";
+import { EntityId } from "../../../../shared/domain/value-objects/entity-id";
 
 /**
  * Port interface for character repository operations.
@@ -28,6 +29,14 @@ export interface CharacterRepositoryPort {
   }>;
 
   /**
+   * Finds characters by ID.
+   *
+   * @param Id - ID to search for.
+   * @returns Character entities matching the ID.
+   */
+  findById(id: EntityId): Promise<Character | null>;
+
+  /**
    * Finds characters by their external IDs.
    *
    * @param externalIds - Array of external IDs to search for.
@@ -44,6 +53,13 @@ export interface CharacterRepositoryPort {
    * @returns Array of Character entities not in the provided list.
    */
   findNotInExternalIds(externalIds: ExternalId[]): Promise<Character[]>;
+
+  /**
+   * Updates a single character.
+   *
+   * @param character - Character entity to update.
+   */
+  update(character: Character): Promise<void>;
 
   /**
    * Creates multiple characters in a single bulk operation.

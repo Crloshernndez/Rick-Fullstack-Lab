@@ -78,6 +78,31 @@ export class CharacterRepository implements CharacterRepositoryPort {
   }
 
   /**
+   * Finds characters by ID.
+   *
+   * @param Id - ID to search for.
+   * @returns Character entities matching the ID.
+   */
+  async findById(id: EntityId): Promise<CharacterEntity | null> {
+    try {
+      const model = await CharacterModel.findOne({
+        where: {
+          id: id.toValue(),
+          isActive: true,
+        },
+      });
+
+      return model ? this.toDomain(model) : null;
+    } catch (error) {
+      throw new RepositoryException(
+        `Failed to find character by id: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    }
+  }
+
+  /**
    * Finds characters by their external IDs.
    *
    * @param externalIds - Array of external IDs to search for.
@@ -130,6 +155,27 @@ export class CharacterRepository implements CharacterRepositoryPort {
     } catch (error) {
       throw new RepositoryException(
         `Failed to find characters not in external IDs: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    }
+  }
+
+  /**
+   * Updates a single character.
+   *
+   * @param character - Character domain entity to update.
+   * @throws {RepositoryException} If update operation fails.
+   */
+  async update(character: CharacterEntity): Promise<void> {
+    try {
+      const data = this.toPersistence(character);
+      await CharacterModel.update(data, {
+        where: { id: character.id.toValue() },
+      });
+    } catch (error) {
+      throw new RepositoryException(
+        `Failed to update character: ${
           error instanceof Error ? error.message : String(error)
         }`
       );
