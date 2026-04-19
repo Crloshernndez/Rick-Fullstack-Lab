@@ -1,5 +1,6 @@
 import { CharacterRepositoryPort } from "../domain/ports/character-repository.port";
 import { CachePort } from "../../../shared/domain/ports/cache.port";
+import { CharacterFilters } from "./dtos/character-filters.dto";
 
 /**
  * Use case for getting paginated characters.
@@ -25,14 +26,15 @@ export class GetCharactersUseCase {
    */
   async execute(
     page: number = this.DEFAULT_PAGE,
-    limit: number = this.DEFAULT_LIMIT
+    limit: number = this.DEFAULT_LIMIT,
+    filters: CharacterFilters = {}
   ): Promise<any> {
     // Validate and sanitize inputs
     const validPage = Math.max(1, page);
     const validLimit = Math.max(1, Math.min(100, limit)); // Max 100 items per page
 
     // Try to get from cache first
-    const cacheKey = `${validPage}:${validLimit}`;
+    const cacheKey = `${validPage}:${validLimit}:${JSON.stringify(filters)}`;
     const cached = await this.cache.get(cacheKey, "characters");
 
     if (cached) {
@@ -42,9 +44,11 @@ export class GetCharactersUseCase {
 
     // If not in cache, fetch from repository
     console.log("📊 Cache miss - fetching from database");
+
     const result = await this.characterRepository.findAll(
       validPage,
-      validLimit
+      validLimit,
+      filters
     );
 
     // Convert domain entities to plain objects for caching
