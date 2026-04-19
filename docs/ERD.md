@@ -11,14 +11,6 @@ The application uses **PostgreSQL** with **Sequelize ORM** for data persistence.
 ```mermaid
 erDiagram
 
-    Users {
-        uuid id PK "Primary key"
-        string username "User display name"
-        boolean is_anonymous "Guest user flag"
-        timestamp createdAt "Record creation timestamp"
-        timestamp updatedAt "Record update timestamp"
-    }
-
     Characters {
         uuid id PK "Primary key"
         int external_id UK "Rick and Morty API ID (unique)"
@@ -33,23 +25,6 @@ erDiagram
         enum sync_status "synced, deprecated"
         boolean is_active "Soft delete flag"
         timestamp last_imported_at "Last sync timestamp"
-        timestamp createdAt "Record creation timestamp"
-        timestamp updatedAt "Record update timestamp"
-    }
-
-    Favorites {
-        uuid id PK "Primary key"
-        uuid user_id FK "References Users.id"
-        uuid character_id FK "References Characters.id"
-        timestamp createdAt "Record creation timestamp"
-        timestamp updatedAt "Record update timestamp"
-    }
-
-    Comments {
-        uuid id PK "Primary key"
-        text content "Comment text"
-        uuid user_id FK "References Users.id"
-        uuid character_id FK "References Characters.id"
         timestamp createdAt "Record creation timestamp"
         timestamp updatedAt "Record update timestamp"
     }
@@ -91,9 +66,6 @@ Stores Rick and Morty character data synchronized from the external API.
 - `sync_status`
 - `is_active`
 
-### Favorites
-Many-to-many relationship between Users and Characters.
-
 **Constraints:**
 - Unique constraint on `(user_id, character_id)` prevents duplicate favorites
 - Cascade delete when user or character is removed
@@ -114,14 +86,6 @@ Audit trail for automated character synchronization jobs.
 - Error details for troubleshooting
 - Job status for monitoring
 
-## Relationships
-
-| Relationship | Type | Description |
-|-------------|------|-------------|
-| Users → Favorites | One-to-Many | A user can favorite multiple characters |
-| Users → Comments | One-to-Many | A user can write multiple comments |
-| Characters → Favorites | One-to-Many | A character can be favorited by multiple users |
-| Characters → Comments | One-to-Many | A character can receive multiple comments |
 
 ## Data Synchronization Strategy
 

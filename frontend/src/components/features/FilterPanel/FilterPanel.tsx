@@ -4,7 +4,11 @@ import { cn } from "@/lib/utils";
 import styles from "./FilterPanel.module.css";
 
 interface FilterPanelProps {
-  onFilterChange?: (filters: { character: string; species: string }) => void;
+  onFilterChange?: (filters: {
+    gender: string;
+    species: string;
+    status: string;
+  }) => void;
 }
 
 const statusOptions = ["All", "Alive", "Dead", "unknown"] as const;
@@ -30,16 +34,16 @@ const genderOptions = [
 ] as const;
 
 export function FilterPanel({ onFilterChange }: FilterPanelProps) {
-  const [character, setCharacter] = useState<string>("All");
   const [species, setSpecies] = useState<string>("All");
   const [status, setStatus] = useState<string>("All");
   const [gender, setGender] = useState<string>("All");
 
-  const hasActiveFilters = character !== "All" || species !== "All";
+  const hasActiveFilters =
+    status !== "All" || species !== "All" || gender !== "All";
 
   const handleFilter = () => {
     if (hasActiveFilters) {
-      onFilterChange?.({ character, species });
+      onFilterChange?.({ status, species, gender });
     }
   };
 
@@ -55,7 +59,7 @@ export function FilterPanel({ onFilterChange }: FilterPanelProps) {
   return (
     <div className={styles.panel}>
       <FilterGroup
-        label="Character"
+        label="Status"
         options={statusOptions}
         value={status}
         onChange={setStatus}

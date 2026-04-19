@@ -6,25 +6,37 @@ import { cn } from "@/lib/utils";
 import styles from "./SearchBar.module.css";
 
 interface SearchBarProps {
-  onFilterChange?: (filters: { character: string; species: string }) => void;
+  onFilterChange?: (filters: {
+    species: string;
+    status: string;
+    gender: string;
+  }) => void;
 }
 
 export function SearchBar({ onFilterChange }: SearchBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [hasActiveFilters, setHasActiveFilters] = useState(false);
 
-  const handleFilterChange = (filters: { character: string; species: string }) => {
+  const handleFilterChange = (filters: {
+    species: string;
+    status: string;
+    gender: string;
+  }) => {
     // Check if any filter has a value different from "All"
-    const hasFilters = filters.character !== "All" || filters.species !== "All";
+    const hasFilters =
+      filters.species !== "All" ||
+      filters.status !== "All" ||
+      filters.gender !== "All";
     setHasActiveFilters(hasFilters);
     onFilterChange?.(filters);
     setIsOpen(false);
   };
 
   const getFilterButtonClass = () => {
-    if (hasActiveFilters) return cn(styles.filterButton, styles['filterButton--active']);
-    if (isOpen) return cn(styles.filterButton, styles['filterButton--open']);
-    return cn(styles.filterButton, styles['filterButton--default']);
+    if (hasActiveFilters)
+      return cn(styles.filterButton, styles["filterButton--active"]);
+    if (isOpen) return cn(styles.filterButton, styles["filterButton--open"]);
+    return cn(styles.filterButton, styles["filterButton--default"]);
   };
 
   const getIconColor = () => {
