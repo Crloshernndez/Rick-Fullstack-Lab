@@ -10,8 +10,6 @@ import {
   HasMany,
   Index,
 } from "sequelize-typescript";
-import { Favorite } from "../../../../../../modules/user-preferences/infrastructure/persistence/sequelize/models/Favorite.model";
-import { Comment } from "../../../../../../modules/user-preferences/infrastructure/persistence/sequelize/models/Comment.model";
 
 export enum SyncStatus {
   SYNCED = "synced",
@@ -108,6 +106,15 @@ export class Character extends Model {
   })
   declare isActive: boolean;
 
+  @Index
+  @Default(true)
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+    field: "is_favorite",
+  })
+  declare isFavorite: boolean;
+
   @Column({
     type: DataType.DATE,
     allowNull: true,
@@ -122,11 +129,4 @@ export class Character extends Model {
   @UpdatedAt
   @Column(DataType.DATE)
   declare updatedAt: Date;
-
-  // Associations
-  @HasMany(() => Favorite)
-  declare favorites: Favorite[];
-
-  @HasMany(() => Comment)
-  declare comments: Comment[];
 }
