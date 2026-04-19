@@ -107,7 +107,7 @@ export class Character extends Model {
   declare isActive: boolean;
 
   @Index
-  @Default(true)
+  @Default(false)
   @Column({
     type: DataType.BOOLEAN,
     allowNull: false,

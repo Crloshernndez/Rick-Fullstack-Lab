@@ -26,6 +26,7 @@ import { BulkCreateOrUpdateCharactersUseCase } from "../../modules/character-cat
 import { MarkCharactersAsDeprecatedUseCase } from "../../modules/character-catalog/application/mark-characters-as-deprecated.use-case";
 import { GetCharactersUseCase } from "../../modules/character-catalog/application/get-characters.use-case";
 import { DeleteCharacterUseCase } from "../../modules/character-catalog/application/delete-character.use-case";
+import { ToggleFavoriteCharacterUseCase } from "../../modules/character-catalog/application/toggle-favorite-character.use-case";
 
 // Use Cases - Data Sync
 import { SyncCharactersUseCase } from "../../modules/data-sync/application/sync-characters.use-case";
@@ -57,6 +58,7 @@ export class Container {
   public readonly markCharactersAsDeprecatedUseCase: MarkCharactersAsDeprecatedUseCase;
   public readonly getCharactersUseCase: GetCharactersUseCase;
   public readonly deleteCharacterUseCase: DeleteCharacterUseCase;
+  public readonly toggleFavoriteCharacterUseCase: ToggleFavoriteCharacterUseCase;
 
   // Use Cases - Data Sync
   public readonly syncCharactersUseCase: SyncCharactersUseCase;
@@ -97,6 +99,11 @@ export class Container {
       this.cache
     );
 
+    this.toggleFavoriteCharacterUseCase = new ToggleFavoriteCharacterUseCase(
+      this.characterRepository,
+      this.cache
+    );
+
     // Initialize Data Sync Services
     this.syncLoggerService = new SyncLoggerService(this.cronLogRepository);
     this.initialSyncGuardService = new InitialSyncGuardService(
@@ -122,7 +129,8 @@ export class Container {
     // Initialize Controllers
     this.characterController = new CharacterController(
       this.getCharactersUseCase,
-      this.deleteCharacterUseCase
+      this.deleteCharacterUseCase,
+      this.toggleFavoriteCharacterUseCase
     );
   }
 }

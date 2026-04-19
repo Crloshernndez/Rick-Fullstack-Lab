@@ -29,5 +29,15 @@ export const characterResolvers = {
     deleteCharacter: async (_: any, { id }: { id: string }, context: any) => {
       return await context.container.characterController.deleteCharacter(id);
     },
+    toggleFavorite: async (
+      _: any,
+      { id, isFavorite }: { id: string; isFavorite: boolean },
+      context: any
+    ) => {
+      return await context.container.characterController.toggleFavorite(
+        id,
+        isFavorite
+      );
+    },
   },
 };

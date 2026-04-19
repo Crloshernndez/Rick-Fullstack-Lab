@@ -1,9 +1,10 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import CharacterDetail from "@/components/features/CharacterDetail";
 import { CharacterSidebar } from "@/components/layout/CharacterSidebar";
 import { MainContent } from "@/components/layout/MainContent";
 import { useCharacters } from "@/hooks/useCharacters";
 import styles from "./CharactersPage.module.css";
+import { useToggleFavorite } from "@/hooks/useToggleFavorite";
 
 function CharactersPage() {
   const [selectedCharacterId, setSelectedCharacterId] = useState<number | null>(
@@ -16,6 +17,7 @@ function CharactersPage() {
 
   // Fetch characters from API with filters
   const { characters, loading, error } = useCharacters(1, 10, filters, sorting);
+  const { toggle } = useToggleFavorite();
 
   const handleFilterChange = (newFilters: {
     status: string;
@@ -61,6 +63,19 @@ function CharactersPage() {
     setActiveFilterCount(count);
   };
 
+  const handleToggleFavorite = async (id: number) => {
+    const isFavorite = favorites.has(id);
+
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (isFavorite) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+    await toggle(id, !isFavorite);
+  };
+
   const handleSearchChange = useCallback((searchTerm: string) => {
     setFilters((prevFilters) => {
       const apiFilters: Record<string, string> = { ...prevFilters };
@@ -90,10 +105,24 @@ function CharactersPage() {
     );
   }
 
+  useEffect(() => {
+    if (characters.length > 0) {
+      setFavorites((prev) => {
+        const next = new Set(prev);
+        characters.forEach((char) => {
+          if (char.isFavorite) next.add(char.id);
+        });
+        return next;
+      });
+    }
+  }, [characters]);
+
   // Filter characters for starred/regular sections
-  const starredCharacters = characters.filter((char) => favorites.has(char.id));
+  const starredCharacters = characters.filter(
+    (char) => favorites.has(char.id) || char.isFavorite
+  );
   const regularCharacters = characters.filter(
-    (char) => !favorites.has(char.id)
+    (char) => !favorites.has(char.id) && !char.isFavorite
   );
   const selectedCharacter = characters.find(
     (char) => char.id === selectedCharacterId
@@ -109,6 +138,7 @@ function CharactersPage() {
         onFilterChange={handleFilterChange}
         onSearchChange={handleSearchChange}
         onSortChange={handleSortingChange}
+        onToggleFavorite={handleToggleFavorite}
         sorting={sorting}
         activeFilterCount={activeFilterCount}
         loading={loading}

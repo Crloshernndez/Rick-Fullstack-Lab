@@ -31,15 +31,16 @@ export function FavoriteButton({
     styles.button,
     styles[`button--${size}`],
     {
-      [styles['button--hidden']]: !visible,
-      [styles['button--visible']]: visible,
-      [styles['button--favorite']]: isFavorite,
-      [styles['button--unfavorite']]: !isFavorite,
+      [styles["button--hidden"]]: !visible,
+      [styles["button--visible"]]: visible,
+      [styles["button--favorite"]]: isFavorite,
+      [styles["button--unfavorite"]]: !isFavorite,
     },
     className
   );
 
-  const ariaLabel = label || (isFavorite ? "Remove from favorites" : "Add to favorites");
+  const ariaLabel =
+    label || (isFavorite ? "Remove from favorites" : "Add to favorites");
 
   return (
     <button
@@ -49,7 +50,7 @@ export function FavoriteButton({
       aria-pressed={isFavorite}
       type="button"
     >
-      <Heart style={{ width: iconSizes[size], height: iconSizes[size] }} />
+      <Heart isFilled={isFavorite} size={iconSizes[size]} />
     </button>
   );
 }
