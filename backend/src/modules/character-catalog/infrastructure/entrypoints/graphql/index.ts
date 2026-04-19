@@ -4,6 +4,6 @@ import { characterResolvers } from "./resolvers/character.resolver";
 
 // Este es el "pegamento" de tu Bounded Context
 export const characterCatalogSchema = makeExecutableSchema({
-  typeDefs: [characterTypeDefs],
-  resolvers: [characterResolvers],
+  typeDefs: characterTypeDefs,
+  resolvers: characterResolvers,
 });
