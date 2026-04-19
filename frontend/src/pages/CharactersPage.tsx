@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import CharacterDetail from "@/components/features/CharacterDetail";
 import { CharacterSidebar } from "@/components/layout/CharacterSidebar";
 import { MainContent } from "@/components/layout/MainContent";
@@ -28,35 +28,56 @@ function CharactersPage() {
       newFilters.gender,
     ].filter((f) => f !== "All").length;
 
-    const apiFilters: Record<string, string> = {};
+    setFilters((prevFilters) => {
+      const apiFilters: Record<string, string> = { ...prevFilters };
 
-    if (newFilters.species !== "All") {
-      apiFilters.species = newFilters.species;
-    }
-    if (newFilters.status !== "All") {
-      apiFilters.status = newFilters.status;
-    }
-    if (newFilters.gender !== "All") {
-      apiFilters.gender = newFilters.gender;
-    }
+      // Remove name filter temporarily to update other filters
+      delete apiFilters.name;
 
-    console.log("Filters applied:", apiFilters);
-    setFilters(apiFilters);
+      if (newFilters.species !== "All") {
+        apiFilters.species = newFilters.species;
+      } else {
+        delete apiFilters.species;
+      }
+      if (newFilters.status !== "All") {
+        apiFilters.status = newFilters.status;
+      } else {
+        delete apiFilters.status;
+      }
+      if (newFilters.gender !== "All") {
+        apiFilters.gender = newFilters.gender;
+      } else {
+        delete apiFilters.gender;
+      }
+
+      // Re-add name filter if it exists
+      if (prevFilters.name) {
+        apiFilters.name = prevFilters.name;
+      }
+
+      console.log("Filters applied:", apiFilters);
+      return apiFilters;
+    });
     setActiveFilterCount(count);
   };
+
+  const handleSearchChange = useCallback((searchTerm: string) => {
+    setFilters((prevFilters) => {
+      const apiFilters: Record<string, string> = { ...prevFilters };
+
+      if (searchTerm.trim()) {
+        apiFilters.name = searchTerm.trim();
+      } else {
+        delete apiFilters.name;
+      }
+
+      return apiFilters;
+    });
+  }, []);
 
   const handleSortingChange = (newSorting: "ASC" | "DESC") => {
     setSorting(newSorting);
   };
-
-  // Loading state
-  if (loading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <p className={styles.loadingText}>Loading characters...</p>
-      </div>
-    );
-  }
 
   // Error state
   if (error) {
@@ -86,9 +107,11 @@ function CharactersPage() {
         selectedCharacterId={selectedCharacterId}
         onCharacterSelect={setSelectedCharacterId}
         onFilterChange={handleFilterChange}
+        onSearchChange={handleSearchChange}
         onSortChange={handleSortingChange}
         sorting={sorting}
         activeFilterCount={activeFilterCount}
+        loading={loading}
       />
 
       <MainContent>
