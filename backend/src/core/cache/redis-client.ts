@@ -1,6 +1,7 @@
 import { createClient, RedisClientType } from "redis";
 import { getRedisConfig } from "./config";
 import { serialize, deserialize, makeKey } from "./helpers";
+import { CachePort } from "../../shared/domain/ports/cache.port";
 
 /**
  * Singleton cache client backed by Redis.
@@ -22,7 +23,7 @@ import { serialize, deserialize, makeKey } from "./helpers";
  * await cache.flushNamespace('users');
  * await cache.close();
  */
-class RedisCache {
+class RedisCache implements CachePort {
   /** The single shared instance of this class. */
   private static instance: RedisCache;
 
@@ -58,7 +59,7 @@ class RedisCache {
    *
    * @returns The shared `RedisCache` instance.
    */
-  public static async getInstance(): Promise<RedisCache> {
+  public static getInstance(): RedisCache {
     if (!RedisCache.instance) {
       RedisCache.instance = new RedisCache();
     }

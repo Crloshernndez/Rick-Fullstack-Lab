@@ -28,8 +28,8 @@ export class CharacterController {
       const result = await this.getCharactersUseCase.execute(page, limit);
 
       return {
-        info: result.info.toObject(),
-        results: result.characters.map((char) => char.toObject()),
+        info: result.info,
+        results: result.characters,
       };
     } catch (error) {
       // Re-throw application errors as-is
