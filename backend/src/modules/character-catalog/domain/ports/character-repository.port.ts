@@ -1,3 +1,4 @@
+import { PaginationInfo } from "../../../../shared/domain/value-objects/pagination-info";
 import { Character } from "../entities/character.entity";
 import { ExternalId } from "../value-objects/external-id";
 
@@ -9,6 +10,21 @@ import { ExternalId } from "../value-objects/external-id";
  * over the data access layer to keep the domain independent of infrastructure concerns.
  */
 export interface CharacterRepositoryPort {
+  /**
+   * Finds all characters paginated.
+   *
+   * @param page - Pagination number.
+   * @param limit - Number of items per page.
+   * @returns Object with pagination info and array of Character entities.
+   */
+  findAll(
+    page: number,
+    limit: number
+  ): Promise<{
+    info: PaginationInfo;
+    characters: Character[];
+  }>;
+
   /**
    * Finds characters by their external IDs.
    *

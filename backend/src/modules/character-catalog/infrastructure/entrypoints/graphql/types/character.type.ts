@@ -1,13 +1,45 @@
 export const characterTypeDefs = `
   type Character {
     id: ID!
+    externalId: Int!
     name: String!
-    status: String!
-    species: String!
-    image: String!
+    status: String
+    species: String
+    type: String
+    gender: String
+    origin: Origin
+    location: Location
+    image: String
+    isSynced: Boolean!
+    isDeprecated: Boolean!
+    createdAt: String!
+    updatedAt: String!
+    lastSyncAt: String
+  }
+
+  type Origin {
+    name: String!
+    id: Int
+  }
+
+  type Location {
+    name: String!
+    id: Int
+  }
+
+  type PaginationInfo {
+    count: Int!
+    pages: Int!
+    next: Int
+    prev: Int
+  }
+
+  type CharacterConnection {
+    info: PaginationInfo!
+    results: [Character!]!
   }
 
   type Query {
-    searchCharacters: [Character!]!
+    characters(page: Int, limit: Int): CharacterConnection!
   }
 `;

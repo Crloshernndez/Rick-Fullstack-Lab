@@ -1,16 +1,14 @@
 export const characterResolvers = {
   Query: {
-    searchCharacters: () => {
-      // Retornamos un array estático para probar la conexión
-      return [
-        {
-          id: "1",
-          name: "Rick Sanchez",
-          status: "Alive",
-          species: "Human",
-          image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-        },
-      ];
+    characters: async (
+      _: any,
+      { page, limit }: { page?: number; limit?: number },
+      context: any
+    ) => {
+      return await context.container.characterController.getPaginatedCharacters(
+        page,
+        limit
+      );
     },
   },
 };

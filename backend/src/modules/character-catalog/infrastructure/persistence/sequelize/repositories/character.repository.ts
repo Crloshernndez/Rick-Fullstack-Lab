@@ -15,6 +15,8 @@ import { CharacterLocation } from "../../../../domain/value-objects/character-lo
 import { Timestamp } from "../../../../../../shared/domain/value-objects/timestamp";
 import { SyncStatus } from "../../../../domain/entities/character.entity";
 import { RepositoryException } from "../../../../../../shared/exceptions/application-errors";
+import { PaginationInfo } from "../../../../../../shared/domain/value-objects/pagination-info";
+import { Count } from "../../../../../../shared/domain/value-objects/count";
 
 /**
  * Sequelize implementation of the Character repository.
@@ -24,6 +26,54 @@ import { RepositoryException } from "../../../../../../shared/exceptions/applica
  * Implements bulk operations for optimal performance during synchronization.
  */
 export class CharacterRepository implements CharacterRepositoryPort {
+  /**
+   * Finds all characters with pagination.
+   *
+   * @param page - Page number (1-indexed).
+   * @param limit - Number of items per page.
+   * @returns Object with pagination info and array of Character domain entities.
+   * @throws {RepositoryException} If database query fails.
+   */
+  async findAll(
+    page: number,
+    limit: number
+  ): Promise<{
+    info: PaginationInfo;
+    characters: CharacterEntity[];
+  }> {
+    try {
+      const offset = (page - 1) * limit;
+
+      const { count, rows } = await CharacterModel.findAndCountAll({
+        where: {
+          isActive: true, // Only return active characters
+        },
+        limit,
+        offset,
+        order: [["createdAt", "DESC"]],
+      });
+
+      const totalPages = Math.ceil(count / limit);
+
+      const info = new PaginationInfo({
+        count: new Count(count),
+        pages: new Count(totalPages),
+        next: page < totalPages ? page + 1 : null,
+        prev: page > 1 ? page - 1 : null,
+      });
+
+      const characters = rows.map((model) => this.toDomain(model));
+
+      return { info, characters };
+    } catch (error) {
+      throw new RepositoryException(
+        `Failed to find paginated characters: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    }
+  }
+
   /**
    * Finds characters by their external IDs.
    *

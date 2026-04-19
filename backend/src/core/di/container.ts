@@ -6,12 +6,16 @@
  * don't depend on low-level modules, but both depend on abstractions.
  *
  * This container provides:
+ * - Cache
  * - Repositories
  * - Use Cases
  * - Services
  * - Adapters
  * - External clients
  */
+
+// Cache
+// import RedisCache from "../cache/redis-client";
 
 // Repositories
 import { CharacterRepository } from "../../modules/character-catalog/infrastructure/persistence/sequelize/repositories/character.repository";
@@ -20,6 +24,7 @@ import { CronLogRepository } from "../../modules/data-sync/infrastructure/persis
 // Use Cases - Character Catalog
 import { BulkCreateOrUpdateCharactersUseCase } from "../../modules/character-catalog/application/bulk-create-or-update-characters.use-case";
 import { MarkCharactersAsDeprecatedUseCase } from "../../modules/character-catalog/application/mark-characters-as-deprecated.use-case";
+import { GetCharactersUseCase } from "../../modules/character-catalog/application/get-characters.use-case";
 
 // Use Cases - Data Sync
 import { SyncCharactersUseCase } from "../../modules/data-sync/application/sync-characters.use-case";
@@ -32,10 +37,16 @@ import { InitialSyncGuardService } from "../../modules/data-sync/domain/services
 import { CharacterCatalogAdapter } from "../../modules/data-sync/infrastructure/adapters/character-catalog.adapter";
 import { RickAndMortyGraphqlClient } from "../../modules/data-sync/infrastructure/adapters/rick-and-morty-graphql.client";
 
+// Controllers
+import { CharacterController } from "../../modules/character-catalog/infrastructure/entrypoints/graphql/controllers/character.controller";
+
 /**
  * Application container holding all initialized dependencies.
  */
 export class Container {
+  // Cache
+  // public readonly cache: RedisCache;
+
   // Repositories
   public readonly characterRepository: CharacterRepository;
   public readonly cronLogRepository: CronLogRepository;
@@ -43,6 +54,7 @@ export class Container {
   // Use Cases - Character Catalog
   public readonly bulkCreateOrUpdateCharactersUseCase: BulkCreateOrUpdateCharactersUseCase;
   public readonly markCharactersAsDeprecatedUseCase: MarkCharactersAsDeprecatedUseCase;
+  public readonly getCharactersUseCase: GetCharactersUseCase;
 
   // Use Cases - Data Sync
   public readonly syncCharactersUseCase: SyncCharactersUseCase;
@@ -55,7 +67,13 @@ export class Container {
   public readonly characterCatalogAdapter: CharacterCatalogAdapter;
   public readonly rickAndMortyApiClient: RickAndMortyGraphqlClient;
 
+  // Controllers
+  public readonly characterController: CharacterController;
+
   constructor() {
+    // Initialize Cache
+    // this.cache = RedisCache.getInstance();
+
     // Initialize Repositories
     this.characterRepository = new CharacterRepository();
     this.cronLogRepository = new CronLogRepository();
@@ -66,6 +84,11 @@ export class Container {
 
     this.markCharactersAsDeprecatedUseCase =
       new MarkCharactersAsDeprecatedUseCase(this.characterRepository);
+
+    this.getCharactersUseCase = new GetCharactersUseCase(
+      this.characterRepository
+      // this.cache
+    );
 
     // Initialize Data Sync Services
     this.syncLoggerService = new SyncLoggerService(this.cronLogRepository);
@@ -87,6 +110,11 @@ export class Container {
       this.rickAndMortyApiClient,
       this.characterCatalogAdapter,
       this.syncLoggerService
+    );
+
+    // Initialize Controllers
+    this.characterController = new CharacterController(
+      this.getCharactersUseCase
     );
   }
 }
