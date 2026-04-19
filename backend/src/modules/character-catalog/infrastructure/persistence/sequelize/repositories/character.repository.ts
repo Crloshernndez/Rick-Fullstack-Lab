@@ -19,6 +19,7 @@ import { PaginationInfo } from "../../../../../../shared/domain/value-objects/pa
 import { Count } from "../../../../../../shared/domain/value-objects/count";
 import { CharacterSpecificationTranslator } from "../translators/character-specification.translator";
 import { CharacterFilters } from "../../../../application/dtos/character-filters.dto";
+import { SortOrder } from "../../../../../../shared/domain/value-objects/sort-order";
 
 /**
  * Sequelize implementation of the Character repository.
@@ -39,7 +40,8 @@ export class CharacterRepository implements CharacterRepositoryPort {
   async findAll(
     page: number,
     limit: number,
-    filters: CharacterFilters = {}
+    filters: CharacterFilters = {},
+    sorting: SortOrder
   ): Promise<{
     info: PaginationInfo;
     characters: CharacterEntity[];
@@ -53,7 +55,7 @@ export class CharacterRepository implements CharacterRepositoryPort {
         where,
         limit,
         offset,
-        order: [["createdAt", "DESC"]],
+        order: [["name", sorting.toValue()]],
       });
 
       const characters = rows.map((model) => this.toDomain(model));

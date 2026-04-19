@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('characters', {
+    await queryInterface.createTable("characters", {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -48,11 +48,16 @@ module.exports = {
         allowNull: true,
       },
       sync_status: {
-        type: Sequelize.ENUM('synced', 'deprecated'),
+        type: Sequelize.ENUM("synced", "deprecated"),
         allowNull: false,
-        defaultValue: 'synced',
+        defaultValue: "synced",
       },
       is_active: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      is_favorite: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: true,
@@ -64,35 +69,39 @@ module.exports = {
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
 
     // Add indexes
-    await queryInterface.addIndex('characters', ['external_id'], {
+    await queryInterface.addIndex("characters", ["external_id"], {
       unique: true,
-      name: 'characters_external_id_unique_idx',
+      name: "characters_external_id_unique_idx",
     });
 
-    await queryInterface.addIndex('characters', ['sync_status'], {
-      name: 'characters_sync_status_idx',
+    await queryInterface.addIndex("characters", ["sync_status"], {
+      name: "characters_sync_status_idx",
     });
 
-    await queryInterface.addIndex('characters', ['is_active'], {
-      name: 'characters_is_active_idx',
+    await queryInterface.addIndex("characters", ["is_active"], {
+      name: "characters_is_active_idx",
     });
 
-    await queryInterface.addIndex('characters', ['name'], {
-      name: 'characters_name_idx',
+    await queryInterface.addIndex("characters", ["is_favorite"], {
+      name: "characters_is_favorite_idx",
+    });
+
+    await queryInterface.addIndex("characters", ["name"], {
+      name: "characters_name_idx",
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('characters');
+    await queryInterface.dropTable("characters");
   },
 };

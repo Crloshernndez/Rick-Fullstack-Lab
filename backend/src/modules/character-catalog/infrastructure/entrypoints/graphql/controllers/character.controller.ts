@@ -32,13 +32,15 @@ export class CharacterController {
   async getPaginatedCharacters(
     page?: number,
     limit?: number,
-    filters?: CharacterFilters
+    filters?: CharacterFilters,
+    sorting?: string
   ) {
     try {
       const result = await this.getCharactersUseCase.execute(
         page,
         limit,
-        filters
+        filters,
+        sorting
       );
 
       return {

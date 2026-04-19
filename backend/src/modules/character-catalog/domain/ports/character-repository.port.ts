@@ -3,6 +3,7 @@ import { Character } from "../entities/character.entity";
 import { CharacterFilters } from "../../application/dtos/character-filters.dto";
 import { ExternalId } from "../value-objects/external-id";
 import { EntityId } from "../../../../shared/domain/value-objects/entity-id";
+import { SortOrder } from "../../../../shared/domain/value-objects/sort-order";
 
 /**
  * Port interface for character repository operations.
@@ -22,7 +23,8 @@ export interface CharacterRepositoryPort {
   findAll(
     page: number,
     limit: number,
-    filters: CharacterFilters
+    filters: CharacterFilters,
+    sorting: SortOrder
   ): Promise<{
     info: PaginationInfo;
     characters: Character[];

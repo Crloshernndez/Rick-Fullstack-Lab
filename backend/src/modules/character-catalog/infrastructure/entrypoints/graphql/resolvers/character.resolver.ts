@@ -8,13 +8,20 @@ export const characterResolvers = {
         page,
         limit,
         filters,
-      }: { page?: number; limit?: number; filters?: CharacterFilters },
+        sorting,
+      }: {
+        page?: number;
+        limit?: number;
+        filters?: CharacterFilters;
+        sorting?: string;
+      },
       context: any
     ) => {
       return await context.container.characterController.getPaginatedCharacters(
         page,
         limit,
-        filters
+        filters,
+        sorting
       );
     },
   },

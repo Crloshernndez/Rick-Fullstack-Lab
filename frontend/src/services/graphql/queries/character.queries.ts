@@ -1,13 +1,31 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
-export const SEARCH_CHARACTERS = gql`
-  query SearchCharacters {
-    searchCharacters {
-      id
-      name
-      status
-      species
-      image
+export const GET_CHARACTERS = gql`
+  query GetCharacters(
+    $page: Int
+    $limit: Int
+    $filters: CharacterFilters
+    $sorting: String
+  ) {
+    characters(
+      page: $page
+      limit: $limit
+      filters: $filters
+      sorting: $sorting
+    ) {
+      info {
+        count
+        pages
+        next
+        prev
+      }
+      results {
+        id
+        name
+        status
+        species
+        image
+      }
     }
   }
 `;

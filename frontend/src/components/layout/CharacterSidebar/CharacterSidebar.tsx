@@ -10,6 +10,8 @@ interface CharacterSidebarProps {
   selectedCharacterId: number | null;
   onCharacterSelect: (id: number) => void;
   onFilterChange: (filters: { character: string; species: string }) => void;
+  onSortChange: (sorting: "ASC" | "DESC") => void;
+  sorting: "ASC" | "DESC";
 }
 
 export function CharacterSidebar({
@@ -18,7 +20,13 @@ export function CharacterSidebar({
   selectedCharacterId,
   onCharacterSelect,
   onFilterChange,
+  onSortChange,
+  sorting,
 }: CharacterSidebarProps) {
+  const toggleSort = () => {
+    onSortChange(sorting === "ASC" ? "DESC" : "ASC");
+  };
+
   return (
     <aside className={styles.sidebar}>
       <header className={styles.header}>
@@ -29,6 +37,13 @@ export function CharacterSidebar({
 
       <div className={styles.searchContainer}>
         <SearchBar onFilterChange={onFilterChange} />
+        <button
+          onClick={toggleSort}
+          title={`Sort ${sorting === "ASC" ? "Z → A" : "A → Z"}`}
+          className={styles.sortButton}
+        >
+          {sorting === "ASC" ? "A→Z" : "Z→A"}
+        </button>
       </div>
 
       <div className={styles.listContainer}>

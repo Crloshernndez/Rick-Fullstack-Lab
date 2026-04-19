@@ -53,7 +53,7 @@ export const characterTypeDefs = `
   }
 
   type Query {
-    characters(page: Int, limit: Int, filters: CharacterFilters): CharacterConnection!
+    characters(page: Int, limit: Int, filters: CharacterFilters, sorting: String): CharacterConnection!
   }
 
   type Mutation {
