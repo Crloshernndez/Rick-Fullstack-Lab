@@ -39,7 +39,15 @@ export const characterTypeDefs = `
     results: [Character!]!
   }
 
+  input CharacterFilters {
+    status: String
+    gender: String
+    species: String
+    name: String
+    origin: String
+  }
+
   type Query {
-    characters(page: Int, limit: Int): CharacterConnection!
+    characters(page: Int, limit: Int, filters: CharacterFilters): CharacterConnection!
   }
 `;

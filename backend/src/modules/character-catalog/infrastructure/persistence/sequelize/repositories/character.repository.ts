@@ -17,6 +17,8 @@ import { SyncStatus } from "../../../../domain/entities/character.entity";
 import { RepositoryException } from "../../../../../../shared/exceptions/application-errors";
 import { PaginationInfo } from "../../../../../../shared/domain/value-objects/pagination-info";
 import { Count } from "../../../../../../shared/domain/value-objects/count";
+import { CharacterSpecificationTranslator } from "../translators/character-specification.translator";
+import { CharacterFilters } from "../../../../application/dtos/character-filters.dto";
 
 /**
  * Sequelize implementation of the Character repository.
@@ -36,22 +38,25 @@ export class CharacterRepository implements CharacterRepositoryPort {
    */
   async findAll(
     page: number,
-    limit: number
+    limit: number,
+    filters: CharacterFilters = {}
   ): Promise<{
     info: PaginationInfo;
     characters: CharacterEntity[];
   }> {
     try {
       const offset = (page - 1) * limit;
+      const translator = new CharacterSpecificationTranslator();
+      const where = translator.translate(filters);
 
       const { count, rows } = await CharacterModel.findAndCountAll({
-        where: {
-          isActive: true, // Only return active characters
-        },
+        where,
         limit,
         offset,
         order: [["createdAt", "DESC"]],
       });
+
+      const characters = rows.map((model) => this.toDomain(model));
 
       const totalPages = Math.ceil(count / limit);
 
@@ -61,8 +66,6 @@ export class CharacterRepository implements CharacterRepositoryPort {
         next: page < totalPages ? page + 1 : null,
         prev: page > 1 ? page - 1 : null,
       });
-
-      const characters = rows.map((model) => this.toDomain(model));
 
       return { info, characters };
     } catch (error) {

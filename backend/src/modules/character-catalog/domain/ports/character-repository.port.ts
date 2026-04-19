@@ -1,5 +1,6 @@
 import { PaginationInfo } from "../../../../shared/domain/value-objects/pagination-info";
 import { Character } from "../entities/character.entity";
+import { CharacterFilters } from "../../application/dtos/character-filters.dto";
 import { ExternalId } from "../value-objects/external-id";
 
 /**
@@ -19,7 +20,8 @@ export interface CharacterRepositoryPort {
    */
   findAll(
     page: number,
-    limit: number
+    limit: number,
+    filters: CharacterFilters
   ): Promise<{
     info: PaginationInfo;
     characters: Character[];

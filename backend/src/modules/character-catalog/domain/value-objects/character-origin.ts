@@ -56,6 +56,22 @@ export class CharacterOrigin extends ValueObject<OriginData> {
   }
 
   /**
+   * Returns the origin's name as a primitive string.
+   *
+   * Useful when only the name is needed without the full origin object,
+   * such as when filtering or displaying the character's origin.
+   *
+   * @returns The origin name as a string.
+   *
+   * @example
+   * const origin = new CharacterOrigin({ name: 'Earth', id: 1 });
+   * origin.getName(); // 'Earth'
+   */
+  getName(): string {
+    return this.name.toValue();
+  }
+
+  /**
    * Returns a plain object representation of the origin.
    *
    * Useful for serialization or persistence operations.
