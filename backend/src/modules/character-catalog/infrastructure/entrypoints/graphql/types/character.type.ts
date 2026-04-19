@@ -47,7 +47,16 @@ export const characterTypeDefs = `
     origin: String
   }
 
+  type DeleteCharacterResponse {
+    success: Boolean!
+    message: String!
+  }
+
   type Query {
     characters(page: Int, limit: Int, filters: CharacterFilters): CharacterConnection!
+  }
+
+  type Mutation {
+    deleteCharacter(id: ID!): DeleteCharacterResponse!
   }
 `;

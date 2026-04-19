@@ -25,6 +25,7 @@ import { CronLogRepository } from "../../modules/data-sync/infrastructure/persis
 import { BulkCreateOrUpdateCharactersUseCase } from "../../modules/character-catalog/application/bulk-create-or-update-characters.use-case";
 import { MarkCharactersAsDeprecatedUseCase } from "../../modules/character-catalog/application/mark-characters-as-deprecated.use-case";
 import { GetCharactersUseCase } from "../../modules/character-catalog/application/get-characters.use-case";
+import { DeleteCharacterUseCase } from "../../modules/character-catalog/application/delete-character.use-case";
 
 // Use Cases - Data Sync
 import { SyncCharactersUseCase } from "../../modules/data-sync/application/sync-characters.use-case";
@@ -55,6 +56,7 @@ export class Container {
   public readonly bulkCreateOrUpdateCharactersUseCase: BulkCreateOrUpdateCharactersUseCase;
   public readonly markCharactersAsDeprecatedUseCase: MarkCharactersAsDeprecatedUseCase;
   public readonly getCharactersUseCase: GetCharactersUseCase;
+  public readonly deleteCharacterUseCase: DeleteCharacterUseCase;
 
   // Use Cases - Data Sync
   public readonly syncCharactersUseCase: SyncCharactersUseCase;
@@ -90,6 +92,11 @@ export class Container {
       this.cache
     );
 
+    this.deleteCharacterUseCase = new DeleteCharacterUseCase(
+      this.characterRepository,
+      this.cache
+    );
+
     // Initialize Data Sync Services
     this.syncLoggerService = new SyncLoggerService(this.cronLogRepository);
     this.initialSyncGuardService = new InitialSyncGuardService(
@@ -114,7 +121,8 @@ export class Container {
 
     // Initialize Controllers
     this.characterController = new CharacterController(
-      this.getCharactersUseCase
+      this.getCharactersUseCase,
+      this.deleteCharacterUseCase
     );
   }
 }
