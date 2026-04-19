@@ -1,0 +1,44 @@
+@reference "tailwindcss";
+
+/* Container */
+.container {
+  @apply ml-10;
+  @apply flex items-center gap-3 md:gap-4;
+  @apply w-full max-w-[343px];
+  @apply h-16 md:h-[74px];
+  @apply px-4 md:px-5 py-3 md:py-4;
+  @apply rounded-lg;
+  @apply cursor-pointer;
+  @apply transition-all duration-150;
+}
+
+.container--default {
+  @apply bg-transparent;
+}
+
+.container--active,
+.container--default:hover {
+  background-color: #EEE3FF;
+}
+
+/* Content */
+.content {
+  @apply flex-1 min-w-0 flex flex-col justify-center;
+  @apply gap-0.5;
+}
+
+.name {
+  @apply font-semibold text-sm md:text-base;
+  @apply text-slate-900 truncate;
+  @apply m-0;
+  font-family: 'Greycliff CF', sans-serif;
+  line-height: 1.3;
+}
+
+.species {
+  @apply font-normal text-xs md:text-sm;
+  @apply text-slate-400 truncate;
+  @apply m-0;
+  font-family: 'Greycliff CF', sans-serif;
+  line-height: 1.3;
+}
