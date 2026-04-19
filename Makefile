@@ -173,6 +173,15 @@ docker-db-reset: ## Resetea la base de datos (Docker)
 	$(DOCKER_COMPOSE) exec backend npx sequelize-cli db:seed:all
 
 # =============================================================================
+# DATA SYNCHRONIZATION (Docker)
+# =============================================================================
+docker-sync-initial: ## Ejecuta la sincronización inicial de personajes (Docker)
+	$(DOCKER_COMPOSE) exec backend npm run sync:initial
+
+docker-sync-manual: ## Ejecuta la sincronización manual de personajes (Docker)
+	$(DOCKER_COMPOSE) exec backend npm run sync:manual
+
+# =============================================================================
 # TESTING (Docker)
 # =============================================================================
 docker-test-backend: ## Ejecuta los tests del backend (Docker)

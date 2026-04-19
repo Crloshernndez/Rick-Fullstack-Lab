@@ -106,6 +106,46 @@ npm run build        # Build para producción
 npm start            # Ejecutar en producción
 npm run migrate      # Ejecutar migraciones
 npm test             # Ejecutar tests
+npm run sync:initial # Sincronización inicial de personajes
+npm run sync:manual  # Sincronización manual de personajes
+```
+
+## Sincronización de Datos
+
+El sistema implementa sincronización automática de personajes desde la API de Rick and Morty, con tres tipos de sincronización:
+
+### Tipos de Sincronización
+
+1. **Initial Sync** (`npm run sync:initial`):
+   - Se ejecuta al iniciar la aplicación por primera vez
+   - Sincroniza un número limitado de personajes (configurable con `INITIAL_CHARACTERS` en `.env`)
+   - Solo se ejecuta una vez (usa guard para prevenir ejecuciones duplicadas)
+   - Registra el tipo como `initial` en los logs
+
+2. **Scheduled Sync** (Cron automático):
+   - Se ejecuta cada 12 horas automáticamente
+   - Sincroniza todos los personajes disponibles
+   - Marca personajes faltantes como deprecados
+   - Registrado en `src/crons/sync-characters.cron.ts`
+
+3. **Manual Sync** (`npm run sync:manual`):
+   - Permite ejecutar sincronización completa manualmente
+   - Útil para actualizar datos bajo demanda
+   - Registra el tipo como `manual` en los logs
+
+### Funcionamiento
+
+- **Paginación**: Procesa personajes página por página
+- **Bulk Operations**: Usa operaciones masivas para mejor rendimiento
+- **Logging**: Registra cada sincronización en la tabla `cron_logs` con estadísticas
+- **Error Handling**: Captura y registra errores sin detener la aplicación
+- **Deprecation**: En sincronizaciones completas, marca personajes que ya no existen en la API
+
+### Configuración
+
+```env
+INITIAL_CHARACTERS=15              # Límite de personajes en sync inicial
+RICK_AND_MORTY_API_URL=...         # URL de la API de Rick and Morty
 ```
 
 ## Sistema de Excepciones

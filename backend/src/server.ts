@@ -2,7 +2,7 @@ import { setupApp } from "./app";
 import { connectDB } from "./core/database";
 import { connectRedis, closeRedis } from "./core/cache";
 import { getContainer } from "./core/di/container";
-// import { registerSyncCharactersCron } from "./crons/sync-characters.cron";
+import { registerSyncCharactersCron } from "./crons/sync-characters.cron";
 
 const PORT = process.env.API_PORT || 4000;
 
@@ -15,7 +15,7 @@ async function bootstrap() {
 
     const app = await setupApp(container);
 
-    // registerSyncCharactersCron();
+    registerSyncCharactersCron();
 
     const server = app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);
