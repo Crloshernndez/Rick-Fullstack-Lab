@@ -9,6 +9,11 @@ interface FilterPanelProps {
     species: string;
     status: string;
   }) => void;
+  initialFilters?: {
+    species: string;
+    status: string;
+    gender: string;
+  };
 }
 
 const statusOptions = ["All", "Alive", "Dead", "unknown"] as const;
@@ -33,10 +38,10 @@ const genderOptions = [
   "unknown",
 ] as const;
 
-export function FilterPanel({ onFilterChange }: FilterPanelProps) {
-  const [species, setSpecies] = useState<string>("All");
-  const [status, setStatus] = useState<string>("All");
-  const [gender, setGender] = useState<string>("All");
+export function FilterPanel({ onFilterChange, initialFilters }: FilterPanelProps) {
+  const [species, setSpecies] = useState<string>(initialFilters?.species || "All");
+  const [status, setStatus] = useState<string>(initialFilters?.status || "All");
+  const [gender, setGender] = useState<string>(initialFilters?.gender || "All");
 
   const hasActiveFilters =
     status !== "All" || species !== "All" || gender !== "All";

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search } from "@/components/ui/Search";
 import { Adjustments } from "@/components/ui/AdjustmentsIcon";
 import { FilterPanel } from "@/components/features/FilterPanel";
@@ -11,11 +11,30 @@ interface SearchBarProps {
     status: string;
     gender: string;
   }) => void;
+  onSearchChange?: (searchTerm: string) => void;
 }
 
-export function SearchBar({ onFilterChange }: SearchBarProps) {
+export function SearchBar({ onFilterChange, onSearchChange }: SearchBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [hasActiveFilters, setHasActiveFilters] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Keep filter state in SearchBar to persist across re-renders
+  const [currentFilters, setCurrentFilters] = useState({
+    species: "All",
+    status: "All",
+    gender: "All",
+  });
+
+  // Debounce search input (500ms for better UX)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onSearchChange?.(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTerm]);
 
   const handleFilterChange = (filters: {
     species: string;
@@ -28,6 +47,7 @@ export function SearchBar({ onFilterChange }: SearchBarProps) {
       filters.status !== "All" ||
       filters.gender !== "All";
     setHasActiveFilters(hasFilters);
+    setCurrentFilters(filters); // Save filters
     onFilterChange?.(filters);
     setIsOpen(false);
   };
@@ -59,6 +79,8 @@ export function SearchBar({ onFilterChange }: SearchBarProps) {
           type="text"
           placeholder="Search or filter results"
           className={styles.input}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
 
         {/* Filter button */}
@@ -75,7 +97,10 @@ export function SearchBar({ onFilterChange }: SearchBarProps) {
       {/* Dropdown */}
       {isOpen && (
         <div className={styles.dropdown}>
-          <FilterPanel onFilterChange={handleFilterChange} />
+          <FilterPanel
+            onFilterChange={handleFilterChange}
+            initialFilters={currentFilters}
+          />
         </div>
       )}
     </div>
