@@ -9,9 +9,14 @@ interface CharacterSidebarProps {
   regularCharacters: Character[];
   selectedCharacterId: number | null;
   onCharacterSelect: (id: number) => void;
-  onFilterChange: (filters: { character: string; species: string }) => void;
+  onFilterChange: (filters: {
+    status: string;
+    species: string;
+    gender: string;
+  }) => void;
   onSortChange: (sorting: "ASC" | "DESC") => void;
   sorting: "ASC" | "DESC";
+  activeFilterCount: number;
 }
 
 export function CharacterSidebar({
@@ -22,10 +27,13 @@ export function CharacterSidebar({
   onFilterChange,
   onSortChange,
   sorting,
+  activeFilterCount = 0,
 }: CharacterSidebarProps) {
   const toggleSort = () => {
     onSortChange(sorting === "ASC" ? "DESC" : "ASC");
   };
+
+  const totalResults = starredCharacters.length + regularCharacters.length;
 
   return (
     <aside className={styles.sidebar}>
@@ -45,6 +53,17 @@ export function CharacterSidebar({
           {sorting === "ASC" ? "A→Z" : "Z→A"}
         </button>
       </div>
+
+      {/* Results + filter badge */}
+
+      {activeFilterCount > 0 && (
+        <div className={styles.resultsRow}>
+          <span className={styles.resultsCount}>{totalResults} Results</span>
+          <span className={styles.filterBadge}>
+            {activeFilterCount} Filter{activeFilterCount > 1 ? "s" : ""}
+          </span>
+        </div>
+      )}
 
       <div className={styles.listContainer}>
         {starredCharacters.length > 0 && (

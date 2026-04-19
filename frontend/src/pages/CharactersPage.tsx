@@ -12,23 +12,37 @@ function CharactersPage() {
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [sorting, setSorting] = useState<"ASC" | "DESC">("ASC");
+  const [activeFilterCount, setActiveFilterCount] = useState(0);
 
   // Fetch characters from API with filters
   const { characters, loading, error } = useCharacters(1, 10, filters, sorting);
 
   const handleFilterChange = (newFilters: {
-    character: string;
+    status: string;
     species: string;
+    gender: string;
   }) => {
+    const count = [
+      newFilters.species,
+      newFilters.status,
+      newFilters.gender,
+    ].filter((f) => f !== "All").length;
+
     const apiFilters: Record<string, string> = {};
 
-    // Map Character filter (Starred/Others handled in frontend)
-    // Only send species to backend
     if (newFilters.species !== "All") {
       apiFilters.species = newFilters.species;
     }
+    if (newFilters.status !== "All") {
+      apiFilters.status = newFilters.status;
+    }
+    if (newFilters.gender !== "All") {
+      apiFilters.gender = newFilters.gender;
+    }
 
+    console.log("Filters applied:", apiFilters);
     setFilters(apiFilters);
+    setActiveFilterCount(count);
   };
 
   const handleSortingChange = (newSorting: "ASC" | "DESC") => {
@@ -74,6 +88,7 @@ function CharactersPage() {
         onFilterChange={handleFilterChange}
         onSortChange={handleSortingChange}
         sorting={sorting}
+        activeFilterCount={activeFilterCount}
       />
 
       <MainContent>
