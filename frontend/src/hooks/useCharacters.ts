@@ -1,38 +1,25 @@
-import { gql } from "@apollo/client";
+import { GET_CHARACTERS } from "@/services/graphql/queries";
 import type { Character, CharactersResponse } from "@/types";
 import { useQuery } from "@apollo/client/react";
-
-const GET_CHARACTERS = gql`
-  query GetCharacters($page: Int!, $limit: Int!, $filters: CharacterFilters) {
-    characters(page: $page, limit: $limit, filters: $filters) {
-      info {
-        count
-        pages
-      }
-      results {
-        id
-        name
-        status
-        gender
-        species
-        image
-      }
-    }
-  }
-`;
 
 interface CharactersVariables {
   page: number;
   limit: number;
   filters: Record<string, unknown>;
+  sorting: string;
 }
 
-export function useCharacters(page = 1, limit = 10, filters = {}) {
+export function useCharacters(
+  page = 1,
+  limit = 10,
+  filters = {},
+  sorting = "ASC"
+) {
   const { data, loading, error } = useQuery<
     CharactersResponse,
     CharactersVariables
   >(GET_CHARACTERS, {
-    variables: { page, limit, filters },
+    variables: { page, limit, filters, sorting },
   });
 
   return {

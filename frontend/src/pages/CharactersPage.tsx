@@ -6,14 +6,20 @@ import { useCharacters } from "@/hooks/useCharacters";
 import styles from "./CharactersPage.module.css";
 
 function CharactersPage() {
-  const [selectedCharacterId, setSelectedCharacterId] = useState<number | null>(null);
+  const [selectedCharacterId, setSelectedCharacterId] = useState<number | null>(
+    null
+  );
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
   const [filters, setFilters] = useState<Record<string, string>>({});
+  const [sorting, setSorting] = useState<"ASC" | "DESC">("ASC");
 
   // Fetch characters from API with filters
-  const { characters, loading, error } = useCharacters(1, 10, filters);
+  const { characters, loading, error } = useCharacters(1, 10, filters, sorting);
 
-  const handleFilterChange = (newFilters: { character: string; species: string }) => {
+  const handleFilterChange = (newFilters: {
+    character: string;
+    species: string;
+  }) => {
     const apiFilters: Record<string, string> = {};
 
     // Map Character filter (Starred/Others handled in frontend)
@@ -23,6 +29,10 @@ function CharactersPage() {
     }
 
     setFilters(apiFilters);
+  };
+
+  const handleSortingChange = (newSorting: "ASC" | "DESC") => {
+    setSorting(newSorting);
   };
 
   // Loading state
@@ -47,8 +57,12 @@ function CharactersPage() {
 
   // Filter characters for starred/regular sections
   const starredCharacters = characters.filter((char) => favorites.has(char.id));
-  const regularCharacters = characters.filter((char) => !favorites.has(char.id));
-  const selectedCharacter = characters.find((char) => char.id === selectedCharacterId);
+  const regularCharacters = characters.filter(
+    (char) => !favorites.has(char.id)
+  );
+  const selectedCharacter = characters.find(
+    (char) => char.id === selectedCharacterId
+  );
 
   return (
     <div className={styles.container}>
@@ -58,12 +72,16 @@ function CharactersPage() {
         selectedCharacterId={selectedCharacterId}
         onCharacterSelect={setSelectedCharacterId}
         onFilterChange={handleFilterChange}
+        onSortChange={handleSortingChange}
+        sorting={sorting}
       />
 
       <MainContent>
         <CharacterDetail
           character={selectedCharacter}
-          isFavorite={selectedCharacterId ? favorites.has(selectedCharacterId) : false}
+          isFavorite={
+            selectedCharacterId ? favorites.has(selectedCharacterId) : false
+          }
         />
       </MainContent>
     </div>
