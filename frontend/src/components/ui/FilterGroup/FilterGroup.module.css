@@ -1,0 +1,15 @@
+@reference "tailwindcss";
+
+.group {
+  @apply flex flex-col gap-3;
+}
+
+.label {
+  @apply text-sm font-normal text-slate-400;
+  font-family: 'Greycliff CF', sans-serif;
+}
+
+.options {
+  @apply flex gap-2;
+  flex-wrap: wrap;
+}
