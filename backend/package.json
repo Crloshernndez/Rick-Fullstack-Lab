@@ -13,7 +13,8 @@
     "migrate": "sequelize db:migrate",
     "migrate:undo": "sequelize db:migrate:undo",
     "migrate:status": "sequelize db:migrate:status",
-    "sync:initial": "ts-node src/scripts/initial-sync.ts"
+    "sync:initial": "ts-node src/scripts/initial-sync.ts",
+    "sync:manual": "ts-node src/scripts/manual-sync.ts"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.6.0",
+    "@types/node-cron": "^3.0.11",
     "@vitest/coverage-v8": "^4.1.4",
     "sequelize-cli": "^6.6.5",
     "ts-node": "^10.9.2",
@@ -35,6 +37,7 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "graphql": "^16.13.2",
+    "node-cron": "^4.2.1",
     "pg": "^8.20.0",
     "pg-hstore": "^2.3.4",
     "redis": "^5.12.1",
